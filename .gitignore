@@ -1,0 +1,30 @@
+# nodejs
+node_modules
+build
+logs
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Yarn Berry
+# Yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/versions
+
+# misc
+.DS_Store
+*.pem
+
+# Env
+.env.*
+!.env.example
+
+.idea
+.vscode/
+
+# typescript
+*.tsbuildinfo
