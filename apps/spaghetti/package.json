@@ -3,13 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "watch:ts": "tsc -w",
     "clean": "rimraf build",
-    "build": "rimraf build && tsc",
-    "start:dev": "nodemon build/src/server.js",
-    "dev": "rimraf build && tsc && npm-run-all --parallel watch:ts start:dev",
+    "build": "tsc -p .",
+    "dev": "nodemon src/server.ts",
     "start": "node build/src/server.js",
-    "format": "yarn prettier --write --config .prettierrc ./*.json ./*.md  ./*.js ./test/*.ts ./src/*.ts ./src/**/*.ts ./src/**/*.json ./.github/* ./.github/**/*",
+    "format": "yarn prettier --write --config .prettierrc --no-error-on-unmatched-pattern \"**/*.{ts,js,json}\"",
     "lint": "eslint \"**/*.ts\" --quiet --fix"
   },
   "dependencies": {

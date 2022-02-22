@@ -24,7 +24,6 @@ yarn-error.log*
 !.env.example
 
 .idea
-.vscode/
 
 # typescript
 *.tsbuildinfo
