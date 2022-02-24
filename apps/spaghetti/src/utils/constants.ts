@@ -19,3 +19,10 @@ const MONGO_DBNAME = process.env.MONGO_DBNAME;
 export const MONGO_URI = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_BASE_URI}/${MONGO_DBNAME}retryWrites=true&w=majority`;
 
 console.table({ NODE_ENV, SERVER_PORT, SESSION_SECRET, MONGO_BASE_URI });
+
+export const GOOGLE_OAUTH_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID;
+export const GOOGLE_OAUTH_CLIENT_SECRET =
+  process.env.GOOGLE_OAUTH_CLIENT_SECRET;
+
+export const UI_BASE_URL = process.env.UI_BASE_URL;
+export const API_BASE_URL = process.env.API_BASE_URL;

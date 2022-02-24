@@ -8,16 +8,22 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import passport from 'passport';
 
-import { NODE_ENV, MONGO_URI, SESSION_SECRET } from './utils/constants';
+import {
+  NODE_ENV,
+  MONGO_URI,
+  SESSION_SECRET,
+  IS_PROD_ENV,
+} from './utils/constants';
 import { initDb } from './utils/db';
 import logger from './utils/logger';
-import { testRouter, authRouter } from './routes';
+import { testRouter, authRouter, userRouter } from './routes';
+import User from './models/User';
+import { ObjectId } from 'mongodb';
+import { GoogleOAuthStrategy } from './utils/strategies/google.oauth';
 
 const config = require(`./config/config.${NODE_ENV}`);
 
 const app = express();
-
-// TODO: Passport Setup
 
 (async () => {
   // await initDb(); ?
@@ -44,6 +50,10 @@ const app = express();
     })
   );
 
+  if (IS_PROD_ENV) {
+    app.set('trust proxy', 1);
+  }
+
   app.use(
     session({
       secret: SESSION_SECRET || 'neverThoughtThatThisWouldBeAProblem',
@@ -52,6 +62,7 @@ const app = express();
       store: MongoStore.create({
         mongoUrl: MONGO_URI || 'mongodb://localhost:27017/test',
       }),
+      cookie: config.COOKIE_CONFIG,
     })
   );
 
@@ -73,12 +84,28 @@ const app = express();
   app.use(passport.initialize());
   app.use(passport.session());
 
+  passport.serializeUser((user: any, done: any) => {
+    return done(null, user._id);
+  });
+
+  passport.deserializeUser((_id: ObjectId, done: any) => {
+    // TODO: Change doc to IMongoDBUser interface
+    User.findOne({ _id }, (err: Error, doc: any) => {
+      if (err) {
+        return done(err, null);
+      }
+      return done(null, doc);
+    });
+  });
+
+  passport.use(GoogleOAuthStrategy);
+
   // Primary App Routes
   app.use('/auth', authRouter); // Auth Client Routes
-  // app.use('/oauth2', authRouter); // OAuth2 server Routes, etc
 
   // API Routes
   app.use('/api/test', testRouter);
+  app.use('/api/user', userRouter);
 
   app.use(
     (
