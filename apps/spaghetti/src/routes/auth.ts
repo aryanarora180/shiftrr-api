@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import { UI_BASE_URL } from 'src/utils/constants';
+import { UI_BASE_URL } from '../utils/constants';
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.get(
   }
 );
 
-router.get('/logout', (req: express.Request, res: express.Response) => {
+router.get('/google/logout', (req: express.Request, res: express.Response) => {
   if (req.user) {
     req.logout();
     res.redirect(`${UI_BASE_URL}`);

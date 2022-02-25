@@ -1,5 +1,4 @@
-import { ObjectId } from 'mongodb';
-import User from 'src/models/User';
+import User from '../../models/User';
 import {
   GOOGLE_OAUTH_CLIENT_ID,
   GOOGLE_OAUTH_CLIENT_SECRET,
