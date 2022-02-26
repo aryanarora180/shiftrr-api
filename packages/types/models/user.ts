@@ -9,9 +9,9 @@ export default interface IUser extends Document {
   username: string;
   googleId: string;
   email: string;
-  contactNumber: number;
+  contactNumber: string;
   bio: string;
-  credits: string;
+  credits: number;
   sellerProfile: ISeller;
   buyerProfile: IBuyer;
 }

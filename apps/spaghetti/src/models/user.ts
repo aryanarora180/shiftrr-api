@@ -6,7 +6,7 @@ const SellerSchema: Schema = new Schema(
   {
     services: { type: [Schema.Types.ObjectId], ref: 'Service' },
     skills: { type: [String], default: [] },
-    rating: { type: Number, default: 10, min: 0, max: 10 },
+    rating: { type: Number, default: 5, min: 0, max: 5 },
     requests: { type: [Schema.Types.ObjectId], ref: 'Request' },
   },
   {
@@ -16,7 +16,7 @@ const SellerSchema: Schema = new Schema(
 
 const BuyerSchema: Schema = new Schema(
   {
-    rating: { type: Number, default: 10, min: 0, max: 10 },
+    rating: { type: Number, default: 5, min: 0, max: 5 },
     requested: { type: [Schema.Types.ObjectId], ref: 'Request' },
   },
   {
@@ -43,9 +43,9 @@ const UserSchema: Schema = new Schema(
         message: (props) => `${props.value} is not a valid email address.`,
       },
     },
-    contactNumber: { type: Number, required: true },
-    bio: { type: String, required: true, trim: true },
-    credits: { type: String, required: true, trim: true },
+    contactNumber: { type: String },
+    bio: { type: String, trim: true },
+    credits: { type: Number, required: true, trim: true },
     sellerProfile: { type: SellerSchema, required: true },
     buyerProfile: { type: BuyerSchema, required: true },
   },

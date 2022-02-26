@@ -10,7 +10,7 @@ export const GoogleOAuthStrategy = new GoogleStrategy(
     clientID: GOOGLE_OAUTH_CLIENT_ID,
     clientSecret: GOOGLE_OAUTH_CLIENT_SECRET,
     callbackURL: '/auth/google/callback',
-    scope: ['profile'],
+    scope: ['profile', 'email'],
   },
   function (_: any, __: any, profile: any, cb: any) {
     User.findOne(
@@ -22,8 +22,23 @@ export const GoogleOAuthStrategy = new GoogleStrategy(
         }
         if (!doc) {
           const newUser = new User({
+            profilePicture: profile.photos[0].value,
+            name: profile.displayName,
+            username:
+              `${profile.name.givenName}.${profile.name.familyName}`.toLowerCase(),
             googleId: profile.id,
-            username: profile.name.givenName + '.' + profile.name.familyName,
+            email: profile.emails[0].value,
+            contactNumber: '',
+            bio: '',
+            credits: 1000,
+            sellerProfile: {
+              services: [],
+              skills: [],
+              requests: [],
+            },
+            buyerProfile: {
+              requested: [],
+            },
           });
           await newUser.save();
           cb(null, newUser);

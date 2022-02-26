@@ -1,5 +1,7 @@
-import IUser from './user';
-import IService from './service';
-import IRequest from './request';
+import type IBuyer from './buyer';
+import type IRequest from './request';
+import type ISeller from './seller';
+import type IService from './service';
+import type IUser from './user';
 
-export { IUser, IService, IRequest };
+export type { IBuyer, IRequest, ISeller, IService, IUser };
