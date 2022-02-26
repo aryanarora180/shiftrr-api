@@ -30,7 +30,7 @@ const MobileNav: React.FC<{ navItems: NavItemType[] }> = ({ navItems }) => {
   }, []);
 
   return (
-    <nav className="fixed top-0 inset-x-0 md:hidden h-20 items-center border-gray-300 border-b">
+    <nav className="fixed top-0 inset-x-0 md:hidden h-20 items-center bg-white border-gray-300 border-b">
       <div className="flex w-full h-full px-10 mx-auto justify-between items-center ">
         <button
           onClick={toggleMenu}

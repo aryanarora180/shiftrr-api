@@ -11,7 +11,7 @@ const GridLayout: React.FC<Props> = ({ navItems, children }) => {
   return (
     <>
       <Navbar navItems={navItems} />
-      <div>{children}</div>
+      <div className="grid">{children}</div>
     </>
   );
 };

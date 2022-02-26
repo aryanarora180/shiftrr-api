@@ -28,13 +28,13 @@ const ProfileMenu: React.FC<Props> = () => {
         {profile ? (
           <Menu.Items className="origin-top-right absolute right-0 mt-1 w-48 flex flex-col rounded bg-white ring-2 ring-accent-300 ring-opacity-5 focus:outline-none">
             <Menu.Item>
-              <NavItem href="/user" className="px-4 py-2 text-sm text-gray-700">
-                {profile.msg.username}
+              <NavItem href="/profile" className="px-4 py-2 text-sm">
+                {profile.username}
               </NavItem>
             </Menu.Item>
             <Menu.Item>
               <NavItem
-                href="/user/settings"
+                href="/profile/edit"
                 className="px-4 py-2 text-sm text-gray-700"
               >
                 Edit Profile

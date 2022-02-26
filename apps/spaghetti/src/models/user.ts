@@ -6,7 +6,7 @@ import { userRole, userStatus } from '@shiftrr/types/models/user';
 const SellerSchema: Schema = new Schema(
   {
     services: { type: [Schema.Types.ObjectId], ref: 'Service' },
-    majorSkill: { type: String, required: true },
+    domain: { type: String },
     skills: { type: [String], default: [] },
     rating: { type: Number, default: 5, min: 0, max: 5 },
     requests: { type: [Schema.Types.ObjectId], ref: 'Request' },

@@ -10,8 +10,8 @@ const Navbar: React.FC<{ navItems: NavItemType[] }> = ({ navItems }) => {
   return (
     <>
       <MobileNav navItems={navItems} />
-      <nav className="fixed top-0 inset-x-0 hidden md:flex md:justify-between h-24 items-center  ">
-        <div className="flex w-full max-w-7xl mx-auto px-8 justify-between items-center border-gray-300 border-b">
+      <nav className="fixed top-0 inset-x-0 hidden md:flex md:justify-between h-24 items-center bg-white border-gray-300 border-b">
+        <div className="flex w-full h-full max-w-7xl mx-auto px-8 justify-between items-center ">
           <div className="flex items-center gap-x-12">
             <NavItem href="/">
               <Logo className="h-10 w-10" />

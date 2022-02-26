@@ -14,7 +14,7 @@ router.get(
     failureMessage: true,
   }),
   (_req: express.Request, res: express.Response) => {
-    res.redirect(`${UI_BASE_URL}/user`);
+    res.redirect(`${UI_BASE_URL}/profile`);
   }
 );
 

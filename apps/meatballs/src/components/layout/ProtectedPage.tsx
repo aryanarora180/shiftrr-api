@@ -16,9 +16,9 @@ const ProtectedPage: React.FC<Props> = ({ pageProps, children }) => {
   useEffect(() => {
     const _getUser = async () => {
       const profile = await client.get('api/user');
-      console.table(profile);
+      console.table(profile?.msg);
 
-      setProfile(profile);
+      setProfile(profile?.msg);
     };
 
     _getUser();
@@ -27,7 +27,11 @@ const ProtectedPage: React.FC<Props> = ({ pageProps, children }) => {
   // TODO: Add Singular layout to cover all cases
   if (pageProps.protected && !profile) {
     console.log(profile);
-    return <div>Please Login to view this page.</div>;
+    return (
+      <div className="h-screen grid place-items-center">
+        <h5 className="text-xl">Loading...</h5>
+      </div>
+    );
   }
 
   if (
@@ -37,9 +41,11 @@ const ProtectedPage: React.FC<Props> = ({ pageProps, children }) => {
     pageProps.profileTypes.indexOf(profile.type) === -1
   ) {
     return (
-      <div>
-        Authorization Error! You do not have credentials required to view this
-        page.
+      <div className="h-screen grid place-items-center">
+        <h5 className="text-xl">
+          <b>Authorization Error!</b> You do not have credentials required to
+          view this page.
+        </h5>
       </div>
     );
   }

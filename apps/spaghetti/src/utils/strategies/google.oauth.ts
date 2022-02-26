@@ -33,6 +33,7 @@ export const GoogleOAuthStrategy = new GoogleStrategy(
             services: [],
             skills: [],
             requests: [],
+            domain: '',
           },
           buyerProfile: {
             requested: [],

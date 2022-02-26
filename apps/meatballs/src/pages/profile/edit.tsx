@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { GetStaticProps, NextPage } from 'next';
 
 import { useProfileStore } from 'lib/hooks/useProfileStore';
+import EditProfile from 'components/user/EditProfile';
 
 type Props = {};
 
@@ -14,15 +15,14 @@ export const getStaticProps: GetStaticProps = ({ params }) => {
   };
 };
 
-const User: NextPage<Props> = (props) => {
+const EditProfilePage: NextPage<Props> = (props) => {
   const profile = useProfileStore((state) => state.profile);
 
   return (
     <>
-      <h1 className="text-semibold">User:</h1>
-      {JSON.stringify(profile, null, '\t')}
+      <EditProfile {...profile} />
     </>
   );
 };
 
-export default User;
+export default EditProfilePage;

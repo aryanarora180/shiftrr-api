@@ -15,7 +15,7 @@ const Document: React.FC<DocumentProps> = (props) => {
         <meta content="#e63946" name="theme-color" />
         <meta content="#ffffff" name="msapplication-TileColor" />
       </Head>
-      <body>
+      <body className="bg-gray-100">
         <Main />
         <NextScript />
       </body>

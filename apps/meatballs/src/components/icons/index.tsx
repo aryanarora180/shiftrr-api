@@ -3,7 +3,7 @@ function Logo(props: JSX.IntrinsicElements['svg']) {
     <svg
       viewBox="0 0 140 123"
       fill="#d90429"
-      stroke="currentColor"
+      stroke="none"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
