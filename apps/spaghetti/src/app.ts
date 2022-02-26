@@ -5,6 +5,7 @@ import MongoStore from 'connect-mongo';
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
+import { ObjectId } from 'mongodb';
 import morgan from 'morgan';
 import passport from 'passport';
 
@@ -16,10 +17,9 @@ import {
 } from './utils/constants';
 import { initDb } from './utils/db';
 import logger from './utils/logger';
-import { testRouter, authRouter, userRouter } from './routes';
-import User from './models/User';
-import { ObjectId } from 'mongodb';
 import { GoogleOAuthStrategy } from './utils/strategies/google.oauth';
+import User from './models/user';
+import { testRouter, authRouter, userRouter } from './routes';
 
 const config = require(`./config/config.${NODE_ENV}`);
 

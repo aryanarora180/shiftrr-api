@@ -11,6 +11,7 @@
     "lint": "eslint \"**/*.ts\" --quiet --fix"
   },
   "dependencies": {
+    "@shiftrr/types": "workspace:^",
     "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
     "cors": "^2.8.5",

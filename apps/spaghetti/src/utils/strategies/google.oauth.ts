@@ -1,4 +1,4 @@
-import User from '../../models/User';
+import User from '../../models/user';
 import {
   GOOGLE_OAUTH_CLIENT_ID,
   GOOGLE_OAUTH_CLIENT_SECRET,
