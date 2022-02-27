@@ -20,6 +20,7 @@ import logger from './utils/logger';
 import { GoogleOAuthStrategy } from './utils/strategies/google.oauth';
 import User from './models/user';
 import { testRouter, authRouter, userRouter } from './routes';
+import { IUser } from '@shiftrr/types/models';
 
 const config = require(`./config/config.${NODE_ENV}`);
 
@@ -89,8 +90,7 @@ const app = express();
   });
 
   passport.deserializeUser((_id: ObjectId, done: any) => {
-    // TODO: Change doc to IMongoDBUser interface
-    User.findOne({ _id }, (err: Error, doc: any) => {
+    User.findOne({ _id }, (err: Error, doc: IUser) => {
       if (err) {
         return done(err, null);
       }

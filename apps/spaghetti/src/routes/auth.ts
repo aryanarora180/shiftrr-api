@@ -1,5 +1,6 @@
 import express from 'express';
 import passport from 'passport';
+import { isLoggedIn } from '../utils/auth';
 import { UI_BASE_URL } from '../utils/constants';
 
 const router = express.Router();
@@ -17,15 +18,13 @@ router.get(
   }
 );
 
-router.get('/google/logout', (req: express.Request, res: express.Response) => {
-  if (req.user) {
+router.get(
+  '/google/logout',
+  isLoggedIn,
+  (req: express.Request, res: express.Response) => {
     req.logout();
     res.redirect(`${UI_BASE_URL}`);
-  } else {
-    res.status(401).json({
-      err: 'User not logged in',
-    });
   }
-});
+);
 
 export default router;
