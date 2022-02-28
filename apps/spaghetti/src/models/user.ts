@@ -1,10 +1,11 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { IUser } from '@shiftrr/types/models';
+import { IUser, userStatus, userRole } from '@shiftrr/types/models';
 
 const SellerSchema: Schema = new Schema(
   {
     services: { type: [Schema.Types.ObjectId], ref: 'Service' },
+    majorSkill: { type: String, required: true },
     skills: { type: [String], default: [] },
     rating: { type: Number, default: 5, min: 0, max: 5 },
     requests: { type: [Schema.Types.ObjectId], ref: 'Request' },
@@ -46,6 +47,18 @@ const UserSchema: Schema = new Schema(
     contactNumber: { type: String },
     bio: { type: String, trim: true },
     credits: { type: Number, required: true, trim: true },
+    status: {
+      type: String,
+      enum: Object.values(userStatus),
+      default: userStatus.active,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: Object.values(userRole),
+      default: userRole.user,
+      required: true,
+    },
     sellerProfile: { type: SellerSchema, required: true },
     buyerProfile: { type: BuyerSchema, required: true },
   },
