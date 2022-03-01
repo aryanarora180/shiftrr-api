@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { IUser, userStatus, userRole } from '@shiftrr/types/models';
+import { IUser } from '@shiftrr/types/models';
+import { userRole, userStatus } from '@shiftrr/types/models/user';
 
 const SellerSchema: Schema = new Schema(
   {
