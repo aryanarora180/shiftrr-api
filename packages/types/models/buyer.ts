@@ -1,6 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 
-export default interface IBuyer extends Document {
+export default interface IBuyer {
+  _id: mongoose.Types.ObjectId;
   rating: number;
-  requested: [mongoose.Types.ObjectId];
+  requested?: [mongoose.Types.ObjectId];
 }

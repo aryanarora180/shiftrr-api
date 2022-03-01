@@ -13,14 +13,15 @@ export enum userRole {
   user = 'user',
 }
 
-export default interface IUser extends Document {
+export default interface IUser {
+  _id: mongoose.Types.ObjectId;
   profilePicture: string;
   name: string;
   username: string;
   googleId: string;
   email: string;
-  contactNumber: string;
-  bio: string;
+  contactNumber?: string;
+  bio?: string;
   credits: number;
   status: userStatus;
   role: userRole;

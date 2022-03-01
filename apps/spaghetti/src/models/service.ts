@@ -4,11 +4,11 @@ import { IService } from '@shiftrr/types/models';
 
 const ServiceSchema: Schema = new Schema(
   {
-    seller: { type: Schema.Types.ObjectId, ref: 'User' },
+    seller: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
     startingPrice: { type: Number, required: true },
-    rating: { type: Number, default: 10, min: 0, max: 10 },
+    rating: { type: Number, default: 10, min: 0, max: 10, required: true },
   },
   {
     timestamps: true,

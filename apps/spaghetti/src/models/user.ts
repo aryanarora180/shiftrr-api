@@ -8,7 +8,7 @@ const SellerSchema: Schema = new Schema(
     services: { type: [Schema.Types.ObjectId], ref: 'Service' },
     domain: { type: String },
     skills: { type: [String], default: [] },
-    rating: { type: Number, default: 5, min: 0, max: 5 },
+    rating: { type: Number, default: 5, min: 0, max: 5, required: true },
     requests: { type: [Schema.Types.ObjectId], ref: 'Request' },
   },
   {
@@ -18,7 +18,7 @@ const SellerSchema: Schema = new Schema(
 
 const BuyerSchema: Schema = new Schema(
   {
-    rating: { type: Number, default: 5, min: 0, max: 5 },
+    rating: { type: Number, default: 5, min: 0, max: 5, required: true },
     requested: { type: [Schema.Types.ObjectId], ref: 'Request' },
   },
   {
