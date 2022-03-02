@@ -19,7 +19,7 @@ import { initDb } from './utils/db';
 import logger from './utils/logger';
 import { GoogleOAuthStrategy } from './utils/strategies/google.oauth';
 import User from './models/user';
-import { testRouter, authRouter, userRouter } from './routes';
+import { testRouter, authRouter, userRouter, serviceRouter } from './routes';
 import { IUser } from '@shiftrr/types/models';
 
 const config = require(`./config/config.${NODE_ENV}`);
@@ -106,6 +106,7 @@ const app = express();
   // API Routes
   app.use('/api/test', testRouter);
   app.use('/api/user', userRouter);
+  app.use('/api/service', serviceRouter);
 
   app.use(
     (

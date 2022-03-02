@@ -1,6 +1,7 @@
 import express from 'express';
 import { isLoggedIn, isAdminLoggedIn } from '../utils/auth';
 import Service from '../models/service';
+import logger from '../utils/logger';
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get(
 );
 
 router.post('/', (req: express.Request, res: express.Response) => {
-  const { seller, name, description, startingPrice, rating } = req.body.data;
+  const { seller, name, description, startingPrice, rating } = req.body;
   const new_service = new Service({
     seller,
     name,

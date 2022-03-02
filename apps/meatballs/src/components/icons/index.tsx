@@ -105,4 +105,20 @@ function ProfileIcon(props: JSX.IntrinsicElements['svg']) {
   );
 }
 
-export { Logo, MenuIcon, CrossIcon, ProfileIcon };
+function SearchIcon(props: JSX.IntrinsicElements['svg']) {
+  return (
+    <svg
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      {...props}
+    >
+      <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+  );
+}
+
+export { Logo, MenuIcon, CrossIcon, ProfileIcon, SearchIcon };

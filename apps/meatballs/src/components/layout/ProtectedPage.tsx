@@ -15,7 +15,7 @@ const ProtectedPage: React.FC<Props> = ({ pageProps, children }) => {
 
   useEffect(() => {
     const _getUser = async () => {
-      const profile = await client.get('api/user');
+      const profile = await client.get('api/user/me');
       console.table(profile?.msg);
 
       setProfile(profile?.msg);

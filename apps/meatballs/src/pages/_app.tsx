@@ -9,7 +9,7 @@ import { NavItemType } from 'lib/types';
 
 const navItems: NavItemType[] = [
   {
-    href: '/services',
+    href: '/service',
     text: 'Hire Talent',
   },
   {
