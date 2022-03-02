@@ -8,7 +8,7 @@ const ServiceSchema: Schema = new Schema(
     name: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
     startingPrice: { type: Number, required: true },
-    rating: { type: Number, default: 10, min: 0, max: 10, required: true },
+    rating: { type: Number, default: 5, min: 0, max: 5, required: true },
   },
   {
     timestamps: true,
