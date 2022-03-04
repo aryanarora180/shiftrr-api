@@ -15,35 +15,36 @@ const ServiceCard: React.FC<Props> = ({
   startingPrice,
 }) => {
   return (
-    <NextLink href={`/services/${_id}`}>
-      <a>
-        <div
-          className={cn(
-            'flex flex-col justify-between h-96 bg-white rounded-lg p-6 shadow origin-center hover:scale-[1.01] transition-transform'
-          )}
-        >
-          <div className="">
-            <NextLink href={`/profile/${seller.id}`}>
-              <a className="text-xs font-semibold text-gray-600">@{seller}</a>
-            </NextLink>
+    <div
+      className={cn(
+        'flex flex-col justify-between h-96 bg-white rounded-lg p-6 shadow origin-center hover:scale-[1.01] transition-transform'
+      )}
+    >
+      <div className="">
+        <NextLink href={`/profile/${seller}`}>
+          <a className="text-xs font-semibold text-gray-600">@{seller}</a>
+        </NextLink>
+        <NextLink href={`/services/${_id}`}>
+          <a>
             <h6 className="font-semibold text-lg text-accent-200">{name}</h6>
-          </div>
+          </a>
+        </NextLink>
+      </div>
 
-          <div className="">
-            <div className="text-sm text-gray-800 pt-12 pb-4 border-b border-gray-500">
-              {description.slice(0, 100)}...
-            </div>
-            <div className=" font-semibold pt-4 text-gray-600 flex justify-between items-center">
-              <span className="text-accent-300">{rating}/5</span>
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-xs">Starting At</span>
-                <span>₹{startingPrice}</span>
-              </div>
-            </div>
+      <div className="">
+        <div className="text-sm text-gray-800 pt-12 pb-4 border-b border-gray-500">
+          {[...description].slice(0, 100)}
+          {description.length > 100 && '...'}
+        </div>
+        <div className=" font-semibold pt-4 text-gray-600 flex justify-between items-center">
+          <span className="text-accent-300">{rating}/5</span>
+          <div className="flex flex-col">
+            <span className="text-gray-500 text-xs">Starting At</span>
+            <span>₹{startingPrice}</span>
           </div>
         </div>
-      </a>
-    </NextLink>
+      </div>
+    </div>
   );
 };
 

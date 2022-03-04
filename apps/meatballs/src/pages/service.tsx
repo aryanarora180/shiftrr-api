@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { GetStaticProps, NextPage } from 'next';
 
 import { useServicesStore } from 'lib/hooks/useServicesStore';
 import Container from 'components/common/Container';
 import { SearchIcon } from 'components/icons';
 import ServiceCard from 'components/service/ServiceCard';
+import { client } from 'lib/api/axiosClient';
 
 type Props = {};
 
@@ -20,20 +21,31 @@ export const getStaticProps: GetStaticProps = ({ params }) => {
 const ServicesPage: NextPage = (props: Props) => {
   const { services, setServices } = useServicesStore((state) => state);
 
-  const [filteredServices, setFilteredServices] = useState(services);
   const [searchString, setSearchString] = useState('');
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSearchString(e.target.value);
-    setFilteredServices(
-      services.filter((value) => value.name.includes(searchString))
-    );
   };
 
+  const filteredServices = useMemo(() => {
+    if (!searchString || searchString === '') return services;
+    else
+      return services.filter((value) =>
+        value.name
+          .concat(value.description)
+          .toLowerCase()
+          .includes(searchString)
+      );
+  }, [searchString, services]);
+
   useEffect(() => {
-    // TODO: Get from server
-    setServices([]);
+    const _getServices = async () => {
+      const res = await client.get('api/service');
+      setServices(res);
+    };
+
+    _getServices();
   }, [setServices]);
 
   return (
@@ -55,7 +67,7 @@ const ServicesPage: NextPage = (props: Props) => {
           <input
             type="text"
             placeholder="Search for Services..."
-            className="w-full px-3 py-1 focus:text-black rounded-3xl border focus:border-accent-100 focus:outline-none focus:ring-0"
+            className="w-full px-4 py-2 focus:text-black rounded-3xl border focus:border-accent-100 focus:outline-none focus:ring-0"
             value={searchString}
             onChange={onChangeHandler}
             // onBlur={() => setShowResults(false)}

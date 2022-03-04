@@ -35,7 +35,7 @@ export const client = {
       ...config,
       url,
       data,
-      method: 'get',
+      method: 'post',
     });
   },
   put: async (url: string, data?: any, config?: AxiosRequestConfig) => {

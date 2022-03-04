@@ -1,24 +1,19 @@
 import { client } from 'lib/api/axiosClient';
 import { useProfileStore } from 'lib/hooks/useProfileStore';
 import React, { useEffect } from 'react';
-import shallow from 'zustand/shallow';
 
 type Props = {
   pageProps: any;
 };
 
 const ProtectedPage: React.FC<Props> = ({ pageProps, children }) => {
-  const { profile, setProfile } = useProfileStore(
-    (state) => ({ profile: state.profile, setProfile: state.setProfile }),
-    shallow
-  );
+  const { profile, setProfile } = useProfileStore((state) => state);
 
   useEffect(() => {
     const _getUser = async () => {
-      const profile = await client.get('api/user/me');
-      console.table(profile?.msg);
-
-      setProfile(profile?.msg);
+      const res = await client.get('api/user/me');
+      console.log(res.msg);
+      setProfile(res?.msg);
     };
 
     _getUser();

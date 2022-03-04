@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import NextImage from 'next/image';
 import cn from 'classnames';
 
-import { Formik, Field, Form, FormikHelpers } from 'formik';
+import { Formik, Field, Form } from 'formik';
 
 import { IUser, ISeller } from '@shiftrr/types/models';
 

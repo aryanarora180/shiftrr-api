@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import NextImage from 'next/image';
 
 import type { IUser } from '@shiftrr/types/models';
 import Container from 'components/common/Container';
 import Button from 'components/common/Button';
+import Modal from 'components/common/Modal';
+import CreateServiceForm from 'components/service/CreateServiceForm';
 
 type PersonalInformationProps = {
   email: string;
@@ -73,6 +75,8 @@ const Profile: React.FC<Props> = ({
   buyerProfile,
   ...props
 }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
   return (
     <Container>
       <div className="grid grid-cols-1 md:grid-cols-6 gap-5 auto-rows-max">
@@ -128,14 +132,40 @@ const Profile: React.FC<Props> = ({
         {/* Services Offered */}
         <div className="col-span-full">
           <div className="flex flex-col p-6 gap-4 bg-white rounded-lg shadow">
-            <div className="border-b border-gray-300 pb-4">
-              <h4 className="font-semibold text-2xl">Gigs</h4>
-              <span className="text-sm text-gray-500">
-                Publically Offered Gigs
-              </span>
+            <div className="flex justify-between pb-4 border-b border-gray-300">
+              <div className="flex flex-col">
+                <h4 className="font-semibold text-2xl">Gigs</h4>
+                <span className="text-sm text-gray-500">
+                  Publically Offered Gigs
+                </span>
+              </div>
+
+              {isSelf && (
+                <div className="">
+                  <button
+                    className="bg-accent-100 text-white px-3 py-2 rounded-md"
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    Add a Gig
+                  </button>
+                  <Modal
+                    isOpen={modalIsOpen}
+                    setIsOpen={setModalIsOpen}
+                    title="Add a Gig"
+                  >
+                    <CreateServiceForm />
+                  </Modal>
+                </div>
+              )}
             </div>
             {sellerProfile.services?.length ? (
-              <div className="flex gap-x-3"></div>
+              <div className="flex gap-x-3">
+                {sellerProfile.services.map((value, index) => (
+                  <span key={`${value._id}`}>
+                    {JSON.stringify(value, null, 2)}
+                  </span>
+                ))}
+              </div>
             ) : (
               <span className="flex h-full items-center text-gray-500">
                 Wow so empty :(
