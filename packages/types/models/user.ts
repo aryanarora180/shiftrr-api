@@ -3,12 +3,12 @@ import mongoose, { Document } from 'mongoose';
 import IBuyer from './buyer';
 import ISeller from './seller';
 
-export enum userStatus {
+export const enum userStatus {
   active = 'active',
   banned = 'banned',
 }
 
-export enum userRole {
+export const enum userRole {
   admin = 'admin',
   user = 'user',
 }

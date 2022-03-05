@@ -50,13 +50,13 @@ const UserSchema: Schema = new Schema(
     credits: { type: Number, required: true, trim: true },
     status: {
       type: String,
-      enum: Object.values(userStatus),
+      enum: [userStatus.active, userStatus.banned],
       default: userStatus.active,
       required: true,
     },
     role: {
       type: String,
-      enum: Object.values(userRole),
+      enum: [userRole.admin, userRole.user],
       default: userRole.user,
       required: true,
     },

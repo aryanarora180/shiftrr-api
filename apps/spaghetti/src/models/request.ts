@@ -12,7 +12,7 @@ const RequestsSchema: Schema = new Schema(
     information: { type: String, required: true },
     status: {
       type: String,
-      enum: Object.values(requestStatus),
+      enum: [requestStatus.accepted, requestStatus.requested],
       default: requestStatus.requested,
       required: true,
     },

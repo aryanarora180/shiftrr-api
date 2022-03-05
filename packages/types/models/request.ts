@@ -3,7 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import IService from './service';
 import IUser from './user';
 
-export enum requestStatus {
+export const enum requestStatus {
   requested = 'requested',
   accepted = 'accepted',
 }
