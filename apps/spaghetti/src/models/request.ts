@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 import { IRequest } from '@shiftrr/types/models';
+import { requestStatus } from '@shiftrr/types/models/request';
 
 const RequestsSchema: Schema = new Schema(
   {
@@ -8,7 +9,13 @@ const RequestsSchema: Schema = new Schema(
     seller: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     buyer: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     price: { type: Number, required: true },
-    status: { type: Number, required: true },
+    information: { type: String, required: true },
+    status: {
+      type: String,
+      enum: Object.values(requestStatus),
+      default: requestStatus.requested,
+      required: true,
+    },
   },
   {
     timestamps: true,
