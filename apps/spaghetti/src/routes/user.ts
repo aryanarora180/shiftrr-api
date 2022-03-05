@@ -32,6 +32,7 @@ router.put(
   }
 );
 
+// TODO: When user deleted, delete associated services and requests
 router.delete(
   '/me',
   isLoggedIn,
@@ -108,6 +109,7 @@ router.put(
   }
 );
 
+// TODO: When user deleted, delete associated services and requests
 router.delete(
   '/:userId',
   isAdminLoggedIn,
