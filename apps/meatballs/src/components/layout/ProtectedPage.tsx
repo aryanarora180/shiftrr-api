@@ -11,9 +11,11 @@ const ProtectedPage: React.FC<Props> = ({ pageProps, children }) => {
 
   useEffect(() => {
     const _getUser = async () => {
+      // if (profile === null) {
       const res = await client.get('api/user/me');
-      console.log(res.msg);
+      // console.log(res?.msg);
       setProfile(res?.msg);
+      // }
     };
 
     _getUser();
@@ -21,7 +23,7 @@ const ProtectedPage: React.FC<Props> = ({ pageProps, children }) => {
 
   // TODO: Add Singular layout to cover all cases
   if (pageProps.protected && !profile) {
-    console.log(profile);
+    // console.log(profile);
     return (
       <div className="h-screen grid place-items-center">
         <h5 className="text-xl">Loading...</h5>
@@ -33,7 +35,7 @@ const ProtectedPage: React.FC<Props> = ({ pageProps, children }) => {
     pageProps.protected &&
     profile &&
     pageProps.profileTypes &&
-    pageProps.profileTypes.indexOf(profile.type) === -1
+    pageProps.profileTypes.indexOf(profile.role) === -1
   ) {
     return (
       <div className="h-screen grid place-items-center">

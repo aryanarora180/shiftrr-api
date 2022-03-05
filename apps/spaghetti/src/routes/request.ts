@@ -47,12 +47,12 @@ router.post(
   async (req: express.Request, res: express.Response) => {
     const loggedInUser: any = req.user;
     const id = loggedInUser.id;
-    const { service_id, seller_id, price, information } = req.body;
+    const { service, seller, price, information } = req.body;
     const status = requestStatus.requested;
     try {
       const request = await Request.create({
-        service: service_id,
-        seller: seller_id,
+        service: service,
+        seller: seller,
         buyer: id,
         price: price,
         information: information,

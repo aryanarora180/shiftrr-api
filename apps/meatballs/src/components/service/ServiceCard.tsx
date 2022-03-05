@@ -4,7 +4,9 @@ import cn from 'classnames';
 
 import { IService } from '@shiftrr/types/models';
 
-interface Props extends IService {}
+interface Props extends IService {
+  className?: string;
+}
 
 const ServiceCard: React.FC<Props> = ({
   _id,
@@ -13,18 +15,20 @@ const ServiceCard: React.FC<Props> = ({
   description,
   rating,
   startingPrice,
+  className,
 }) => {
   return (
     <div
       className={cn(
-        'flex flex-col justify-between h-96 bg-white rounded-lg p-6 shadow origin-center hover:scale-[1.01] transition-transform'
+        'flex flex-col justify-between h-96 bg-white rounded-lg p-6 shadow origin-center hover:scale-[1.01] transition-transform',
+        className
       )}
     >
       <div className="">
         <NextLink href={`/profile/${seller}`}>
           <a className="text-xs font-semibold text-gray-600">@{seller}</a>
         </NextLink>
-        <NextLink href={`/services/${_id}`}>
+        <NextLink href={`/service/${_id}`}>
           <a>
             <h6 className="font-semibold text-lg text-accent-200">{name}</h6>
           </a>

@@ -78,7 +78,7 @@ const ServicesPage: NextPage = (props: Props) => {
         {/* Search Results */}
         <div className="col-span-full pt-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {filteredServices.length ? (
+            {filteredServices?.length ? (
               filteredServices?.map((value, index) => (
                 <ServiceCard key={value._id.toString()} {...value} />
               ))

@@ -10,9 +10,9 @@ export enum requestStatus {
 
 export default interface IRequest {
   _id: mongoose.Types.ObjectId;
-  service: IService;
-  seller: IUser;
-  buyer: IUser;
+  service: mongoose.Types.ObjectId;
+  seller: mongoose.Types.ObjectId;
+  buyer: mongoose.Types.ObjectId;
   price: number;
   information: string;
   status: requestStatus;

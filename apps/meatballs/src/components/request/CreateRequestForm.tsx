@@ -2,19 +2,30 @@ import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import { useProfileStore } from 'lib/hooks/useProfileStore';
 import { client } from 'lib/api/axiosClient';
+import { IService, IUser } from '@shiftrr/types/models';
 
-type Props = {};
+type Props = {
+  service: IService;
+  seller: IUser;
+};
 
-const CreateServiceForm: React.FC<Props> = (props: Props) => {
+const CreateRequestForm: React.FC<Props> = ({ service, seller }) => {
   const user = useProfileStore((state) => state.profile);
   return (
     <Formik
-      initialValues={{ name: '', description: '', startingPrice: 0 }}
+      initialValues={{
+        serviceName: service.name,
+        sellerName: seller.name,
+        information: '',
+        price: service.startingPrice,
+      }}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        const res = await client.post('/api/service', {
-          seller: user._id,
-          ...values,
-          rating: 5.0,
+        const res = await client.post('/api/requests', {
+          service: service._id,
+          seller: seller._id,
+          buyer: user._id,
+          price: values.price,
+          information: values.information,
         });
         setSubmitting(false);
         resetForm();
@@ -25,10 +36,9 @@ const CreateServiceForm: React.FC<Props> = (props: Props) => {
           description?: string;
           startingPrice?: string;
         } = {};
-        if (!values.name) errors.name = 'Required';
-        if (!values.description) errors.description = 'Required';
-        if (values.startingPrice <= 0)
-          errors.startingPrice = 'Starting Price must be greater than 0';
+        if (!values.information) errors.description = 'Required';
+        if (values.price < service.startingPrice)
+          errors.startingPrice = `Price must be greater than ${service.startingPrice}`;
 
         return errors;
       }}
@@ -38,41 +48,58 @@ const CreateServiceForm: React.FC<Props> = (props: Props) => {
           <div className="grid grid-cols-1 gap-4 w-[18em] sm:w-[30em]">
             <div className="col-span-full flex flex-col gap-1">
               <label
-                htmlFor="name"
+                htmlFor="serviceName"
                 className="font-semibold text-sm text-gray-700"
               >
-                What will you do?
+                Service
               </label>
               <Field
-                name="name"
+                name="serviceName"
                 type="text"
-                className="focus:ring-accent-300 focus:border-accent-300 w-full shadow-sm  border-gray-300 rounded-md"
+                disabled
+                className="focus:ring-accent-300 focus:border-accent-300 w-full shadow-sm bg-gray-300 border-gray-300 rounded-md"
               />
             </div>
             <div className="col-span-full flex flex-col gap-1">
               <label
-                htmlFor="description"
+                htmlFor="sellerName"
                 className="font-semibold text-sm text-gray-700"
               >
-                A bit more detail
+                Seller
               </label>
               <Field
-                name="description"
+                name="sellerName"
+                type="text"
+                disabled
+                className="focus:ring-accent-300 focus:border-accent-300 w-full shadow-sm bg-gray-300 border-gray-300 rounded-md"
+              />
+            </div>
+            <div className="col-span-full flex flex-col gap-1">
+              <label
+                htmlFor="information"
+                className="font-semibold text-sm text-gray-700"
+              >
+                Describe your Requirements
+              </label>
+              <Field
+                name="information"
                 type="text"
                 as="textarea"
+                placeholder="Please make it..."
                 className="focus:ring-accent-300 focus:border-accent-300 w-full shadow-sm  border-gray-300 rounded-md"
               />
             </div>
             <div className="col-span-full flex flex-col gap-1">
               <label
-                htmlFor="startingPrice"
+                htmlFor="price"
                 className="font-semibold text-sm text-gray-700"
               >
-                Starting Price
+                What are you willing to pay?
               </label>
               <Field
-                name="startingPrice"
+                name="price"
                 type="text"
+                placeholder="Please make it..."
                 className="focus:ring-accent-300 focus:border-accent-300 w-full shadow-sm  border-gray-300 rounded-md"
               />
             </div>
@@ -102,4 +129,4 @@ const CreateServiceForm: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default CreateServiceForm;
+export default CreateRequestForm;

@@ -1,11 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import NextImage from 'next/image';
 
-import type { IUser } from '@shiftrr/types/models';
+import type { IService, IUser } from '@shiftrr/types/models';
 import Container from 'components/common/Container';
 import Button from 'components/common/Button';
 import Modal from 'components/common/Modal';
 import CreateServiceForm from 'components/service/CreateServiceForm';
+import { useProfileStore } from 'lib/hooks/useProfileStore';
+import { client } from 'lib/api/axiosClient';
+import ServiceCard from 'components/service/ServiceCard';
 
 type PersonalInformationProps = {
   email: string;
@@ -63,7 +66,7 @@ interface Props extends IUser {
 }
 
 const Profile: React.FC<Props> = ({
-  isSelf,
+  isSelf = false,
   profilePicture,
   name,
   username,
@@ -71,15 +74,51 @@ const Profile: React.FC<Props> = ({
   contactNumber,
   bio,
   credits,
+  role,
+  status,
   sellerProfile,
   buyerProfile,
   ...props
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  const isAdmin = useProfileStore((state) => state.isAdmin);
+  const canBan = useMemo(() => isAdmin && !isSelf, [isAdmin, isSelf]);
+  const isBanned = useMemo(() => status === 'banned', [status]);
+
+  const [isPopulatingService, setIsPopulatingService] = useState(true);
+  const [populatedService, setPopulatedService] = useState<IService[]>([]);
+
+  const toggleBanUser = () => {
+    client.put(`/api/user/${props._id}`, {
+      status: isBanned ? 'active' : 'banned',
+    });
+  };
+
+  useEffect(() => {
+    const populateServices = async () => {
+      if (!sellerProfile.services?.length) {
+        setIsPopulatingService(false);
+        return;
+      }
+
+      const res = await Promise.all(
+        sellerProfile?.services?.map(async (value, index) => {
+          const service = await client.get(`/api/service/${value}`);
+          return service;
+        })
+      );
+
+      setIsPopulatingService(false);
+      setPopulatedService(res);
+    };
+
+    populateServices();
+  }, [sellerProfile?.services]);
+
   return (
     <Container>
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-5 auto-rows-max">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-5 auto-rows-max w-full">
         {/* Header Section */}
         <div className="col-span-full">
           <div className="flex flex-col md:flex-row justify-between items-center">
@@ -93,11 +132,24 @@ const Profile: React.FC<Props> = ({
                 />
               </div>
               <div className="flex flex-col justify-center">
-                <h3 className="font-semibold text-3xl">{name}</h3>
+                <div className="flex gap-x-1 items-center">
+                  <h3 className="font-semibold text-3xl">{name}</h3>
+                  {isAdmin && (
+                    <span className="font-semibold text-gray-500">(admin)</span>
+                  )}
+                </div>
                 <span className="text-sm text-gray-700">@{username}</span>
               </div>
             </div>
             {isSelf && <Button href="/profile/edit">Edit Profile</Button>}
+            {canBan && (
+              <button
+                className="bg-accent-100 text-white px-3 py-2 rounded-md"
+                onClick={() => toggleBanUser()}
+              >
+                {isBanned ? 'Unban' : 'Soft Ban User'}
+              </button>
+            )}
           </div>
         </div>
 
@@ -159,16 +211,21 @@ const Profile: React.FC<Props> = ({
               )}
             </div>
             {sellerProfile.services?.length ? (
-              <div className="flex gap-x-3">
-                {sellerProfile.services.map((value, index) => (
-                  <span key={`${value._id}`}>
-                    {JSON.stringify(value, null, 2)}
-                  </span>
-                ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {populatedService.map(
+                  (service) =>
+                    service && (
+                      <ServiceCard
+                        key={service?._id?.toString()}
+                        {...service}
+                        className="h-auto"
+                      />
+                    )
+                )}
               </div>
             ) : (
               <span className="flex h-full items-center text-gray-500">
-                Wow so empty :(
+                {isPopulatingService ? 'Loading...' : 'Wow so empty :('}
               </span>
             )}
           </div>

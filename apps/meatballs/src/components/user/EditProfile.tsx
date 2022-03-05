@@ -34,9 +34,7 @@ const PersonalProfileForm: React.FC<PersonalProfileFormProps> = ({
         bio,
       }}
       onSubmit={async (values, { setSubmitting }) => {
-        console.log(values);
         const res = await client.put('/api/user/me', values);
-        console.log(res);
         setSubmitting(false);
       }}
     >
