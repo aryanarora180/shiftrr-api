@@ -9,7 +9,8 @@ const router = express.Router();
 router.get(
   '/',
   isLoggedIn,
-  async (req: express.Request, res: express.Response) => {
+  isNotBanned,
+  async (_req: express.Request, res: express.Response) => {
     try {
       const requests = await Request.find({});
       return res.json(requests);
@@ -24,6 +25,7 @@ router.get(
 router.get(
   '/:id',
   isLoggedIn,
+  isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const id = req.params.id;
 

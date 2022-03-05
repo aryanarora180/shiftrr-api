@@ -1,20 +1,26 @@
 import express from 'express';
-import { isLoggedIn, isAdminLoggedIn } from '../utils/auth';
+import { isLoggedIn, isAdminLoggedIn, isNotBanned } from '../utils/auth';
 import User from '../models/user';
 import logger from '../utils/logger';
 
 const router = express.Router();
 
-router.get('/me', isLoggedIn, (req: express.Request, res: express.Response) => {
-  logger.info('[GET /api/user/me] Got logged in user succesfully!');
-  return res.json({
-    msg: req.user,
-  });
-});
+router.get(
+  '/me',
+  isLoggedIn,
+  isNotBanned,
+  (req: express.Request, res: express.Response) => {
+    logger.info('[GET /api/user/me] Got logged in user succesfully!');
+    return res.json({
+      msg: req.user,
+    });
+  }
+);
 
 router.put(
   '/me',
   isLoggedIn,
+  isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const loggedInUser: any = req.user;
     const id = loggedInUser.id;
@@ -36,6 +42,7 @@ router.put(
 router.delete(
   '/me',
   isLoggedIn,
+  isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const loggedInUser: any = req.user;
     const id = loggedInUser.id;
@@ -57,6 +64,7 @@ router.delete(
 router.get(
   '/',
   isLoggedIn,
+  isNotBanned,
   async (_req: express.Request, res: express.Response) => {
     try {
       const users = await User.find();
@@ -74,6 +82,7 @@ router.get(
 router.get(
   '/:userId',
   isLoggedIn,
+  isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const userId = req.params.userId;
     try {
@@ -91,6 +100,7 @@ router.get(
 
 router.put(
   '/:userId',
+  isLoggedIn,
   isAdminLoggedIn,
   async (req: express.Request, res: express.Response) => {
     const userId = req.params.userId;
@@ -112,6 +122,7 @@ router.put(
 // TODO: When user deleted, delete associated services and requests
 router.delete(
   '/:userId',
+  isLoggedIn,
   isAdminLoggedIn,
   async (req: express.Request, res: express.Response) => {
     const userId = req.params.userId;

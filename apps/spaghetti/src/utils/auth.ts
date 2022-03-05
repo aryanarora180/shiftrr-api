@@ -21,18 +21,12 @@ export function isNotBanned(
   res: express.Response,
   next: express.NextFunction
 ) {
-  if (req.isAuthenticated()) {
-    const user: any = req.user;
-    if (user.status !== userStatus.banned) {
-      return next();
-    } else {
-      res.status(401).json({
-        err: 'User banned',
-      });
-    }
+  const user: any = req.user;
+  if (user.status !== userStatus.banned) {
+    return next();
   }
   res.status(401).json({
-    err: 'Authorized user not logged in',
+    err: 'User banned',
   });
 }
 
@@ -41,11 +35,9 @@ export function isAdminLoggedIn(
   res: express.Response,
   next: express.NextFunction
 ) {
-  if (req.isAuthenticated()) {
-    const user: any = req.user;
-    if (user.role === 'admin') {
-      return next();
-    }
+  const user: any = req.user;
+  if (user.role === 'admin') {
+    return next();
   }
   res.status(401).json({
     err: 'Authorized user not logged in',

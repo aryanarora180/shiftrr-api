@@ -1,15 +1,16 @@
 import express from 'express';
-import { isLoggedIn } from '../utils/auth';
+import { isLoggedIn, isNotBanned } from '../utils/auth';
 import Service from '../models/service';
 import User from '../models/user';
 import logger from '../utils/logger';
-import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
 router.get(
   '/',
   isLoggedIn,
+  isNotBanned,
   async (_req: express.Request, res: express.Response) => {
     try {
       const services = await Service.find();
@@ -27,6 +28,7 @@ router.get(
 router.get(
   '/:serviceId',
   isLoggedIn,
+  isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const serviceId = req.params.serviceId;
     try {
@@ -45,6 +47,7 @@ router.get(
 router.post(
   '/',
   isLoggedIn,
+  isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const loggedInUser: any = req.user;
     const loggedInUserId = loggedInUser.id;
@@ -80,20 +83,25 @@ router.post(
 router.put(
   '/:serviceId',
   isLoggedIn,
+  isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const loggedInUser: any = req.user;
     const userId = loggedInUser.id;
     const serviceId = req.params.serviceId;
 
     try {
-      await Service.findOneAndUpdate(
-        { _id: req.params.serviceId, seller: new ObjectId(userId) },
+      const serviceToBeUpdated = await Service.findOne(
+        {
+          _id: req.params.serviceId,
+          seller: new mongoose.Types.ObjectId(userId),
+        },
         req.body
       );
+      await serviceToBeUpdated!.updateOne(req.body);
 
       const updatedService = await Service.findOne({
         _id: req.params.serviceId,
-        seller: new ObjectId(userId),
+        seller: new mongoose.Types.ObjectId(userId),
       });
 
       logger.info(
@@ -111,25 +119,29 @@ router.put(
   }
 );
 
-// TODO: Fix this method, remove service from user
 router.delete(
   '/:serviceId',
   isLoggedIn,
+  isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const loggedInUser: any = req.user;
-    const userId = loggedInUser.id;
-    const serviceId = new ObjectId(req.params.serviceId);
+    const userId = new mongoose.Types.ObjectId(loggedInUser.id);
+    const serviceId = new mongoose.Types.ObjectId(req.params.serviceId);
 
     try {
       const serviceToBeDeleted = await Service.findOne(
-        { _id: serviceId, seller: new ObjectId(userId) },
+        { _id: serviceId, seller: userId },
         req.body
       );
       await serviceToBeDeleted!.delete();
 
       const serviceUser = await User.findOne({ _id: userId });
-      const serviceUserServices = serviceUser!.sellerProfile!.services!;
-      // TODO: Delete service from serviceUserServices
+      const newServiceUserServices =
+        serviceUser!.sellerProfile!.services!.filter((ele) => {
+          return !ele.equals(serviceId);
+        });
+      serviceUser!.sellerProfile!.services! = newServiceUserServices;
+      await serviceUser!.save();
 
       logger.info(
         `[DELETE /api/service/${serviceId}] Deleted service succesfully!`
