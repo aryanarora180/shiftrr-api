@@ -9,6 +9,7 @@ import CreateServiceForm from 'components/service/CreateServiceForm';
 import { useProfileStore } from 'lib/hooks/useProfileStore';
 import { client } from 'lib/api/axiosClient';
 import ServiceCard from 'components/service/ServiceCard';
+import RequestCarousel from 'components/request/RequestCarousel';
 
 type PersonalInformationProps = {
   email: string;
@@ -164,7 +165,7 @@ const Profile: React.FC<Props> = ({
 
         {/* Skills */}
         <div className="col-span-full md:col-span-2 ">
-          <div className="w-full p-6 flex flex-col gap-4 bg-white rounded-lg shadow">
+          <div className="w-full p-6 flex flex-col gap-4 border bg-white rounded-lg shadow">
             <div className="">
               <h4 className="font-semibold text-2xl">Skills</h4>
             </div>
@@ -183,7 +184,7 @@ const Profile: React.FC<Props> = ({
 
         {/* Services Offered */}
         <div className="col-span-full">
-          <div className="flex flex-col p-6 gap-4 bg-white rounded-lg shadow">
+          <div className="flex flex-col p-6 gap-4 border bg-white rounded-lg">
             <div className="flex justify-between pb-4 border-b border-gray-300">
               <div className="flex flex-col">
                 <h4 className="font-semibold text-2xl">Gigs</h4>
@@ -234,20 +235,16 @@ const Profile: React.FC<Props> = ({
         {/* Requests */}
         {isSelf && (
           <div className="col-span-full">
-            <div className="flex flex-col p-6 gap-4 bg-white rounded-lg shadow">
+            <div className="flex flex-col p-6 gap-4 bg-white border rounded-lg shadow">
               <div className="border-b border-gray-300 pb-4">
                 <h4 className="font-semibold text-2xl">Offers to You</h4>
                 <span className="text-sm text-gray-500">
                   Publically Offered Gigs
                 </span>
               </div>
-              {sellerProfile.requests?.length ? (
-                <div className="flex gap-x-3"></div>
-              ) : (
-                <span className="flex h-full items-center text-gray-500">
-                  Wow so empty :(
-                </span>
-              )}
+              <RequestCarousel
+                requests={sellerProfile.requests?.map((req) => req.toString())}
+              />
             </div>
           </div>
         )}
@@ -255,36 +252,43 @@ const Profile: React.FC<Props> = ({
         {/* Requested */}
         {isSelf && (
           <div className="col-span-full">
-            <div className="flex flex-col p-6 gap-4 bg-white rounded-lg shadow">
+            <div className="flex flex-col p-6 gap-4 bg-white border rounded-lg shadow">
               <div className="border-b border-gray-300 pb-4">
                 <h4 className="font-semibold text-2xl">Offers you have Made</h4>
                 <span className="text-sm text-gray-500">
                   Publically Offered Gigs
                 </span>
               </div>
-              {buyerProfile.requested?.length ? (
-                <div className="flex gap-x-3"></div>
-              ) : (
-                <span className="flex h-full items-center text-gray-500">
-                  Wow so empty :(
-                </span>
-              )}
+              <RequestCarousel
+                isBuyer
+                requests={buyerProfile.requested?.map((req) => req.toString())}
+              />
             </div>
           </div>
         )}
 
         {/* Buyer Ratings */}
         <div className="col-span-full md:col-span-3">
-          <div className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow">
-            <h5 className="font-semibold text-xl">Reviews from Buyers</h5>
-            <div className="flex flex-col">{/* TODO: Add Reviews */}</div>
+          <div className="flex flex-col gap-4 p-6 bg-white border rounded-lg shadow">
+            <h5 className="font-semibold text-xl pb-2 border-b">
+              Reviews from Buyers
+            </h5>
+            <div className="flex flex-col">
+              <span className="text-gray-500">No reviews yet</span>
+              {/* TODO: Add Reviews */}
+            </div>
           </div>
         </div>
         {/* Seller Ratings */}
         <div className="col-span-full md:col-span-3">
-          <div className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow">
-            <h5 className="font-semibold text-xl">Reviews from Sellers</h5>
-            <div className="flex flex-col">{/* TODO: Add Reviews */}</div>
+          <div className="flex flex-col gap-4 p-6 bg-white border rounded-lg shadow">
+            <h5 className="font-semibold text-xl pb-2 border-b">
+              Reviews from Sellers
+            </h5>
+            <div className="flex flex-col">
+              <span className="text-gray-500">No reviews yet</span>
+              {/* TODO: Add Reviews */}
+            </div>
           </div>
         </div>
       </div>

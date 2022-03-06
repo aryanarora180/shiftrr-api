@@ -20,7 +20,7 @@ const ServiceCard: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        'flex flex-col justify-between h-96 bg-white rounded-lg p-6 shadow origin-center hover:scale-[1.01] transition-transform',
+        'flex flex-col justify-between h-96 bg-white border rounded-lg p-6 shadow origin-center hover:scale-[1.01] transition-transform',
         className
       )}
     >
