@@ -6,5 +6,5 @@ export default interface ISeller {
   domain?: string;
   skills?: string[];
   rating: number;
-  requests?: [mongoose.Types.ObjectId];
+  requests?: mongoose.Types.ObjectId[];
 }

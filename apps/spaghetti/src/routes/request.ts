@@ -79,7 +79,7 @@ router.put(
 
     try {
       const request = await Request.findById(request_id);
-      if (request != null && request.buyer == id) {
+      if (request != null && request.seller == id) {
         await Request.findOneAndUpdate({ _id: request_id }, { status });
         return res.json({
           msg: 'Request updated',
@@ -87,7 +87,7 @@ router.put(
         });
       } else {
         return res.status(400).json({
-          err: 'You are not the buyer of this request',
+          err: 'You are not the seller of this request',
         });
       }
     } catch (e: any) {
@@ -109,14 +109,14 @@ router.delete(
 
     try {
       const request = await Request.findById(request_id);
-      if (request != null && request.buyer == id) {
-        await Request.findByIdAndDelete(id);
+      if (request != null && (request.buyer == id || request.seller == id)) {
+        await Request.findByIdAndDelete(request_id);
         return res.json({
           msg: 'Request deleted',
         });
       } else {
         return res.status(400).json({
-          err: 'You are not the buyer of this request',
+          err: 'You are not the buyer or the seller of this request',
         });
       }
     } catch (e: any) {
