@@ -1,18 +1,20 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { IRequest } from '../types';
-import { requestStatus } from '../types/request';
+import { IRequest, requestStatus } from '../types';
 
 const RequestsSchema: Schema = new Schema(
   {
     service: { type: Schema.Types.ObjectId, ref: 'Service', required: true },
-    seller: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     buyer: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     price: { type: Number, required: true },
     information: { type: String, required: true },
     status: {
       type: String,
-      enum: [requestStatus.accepted, requestStatus.requested],
+      enum: [
+        requestStatus.accepted,
+        requestStatus.requested,
+        requestStatus.completed,
+      ],
       default: requestStatus.requested,
       required: true,
     },

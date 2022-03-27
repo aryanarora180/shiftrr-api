@@ -5,21 +5,8 @@ import { userRole, userStatus } from '../types/user';
 
 const SellerSchema: Schema = new Schema(
   {
-    services: { type: [Schema.Types.ObjectId], ref: 'Service' },
     domain: { type: String },
-    skills: { type: [String], default: [] },
-    rating: { type: Number, default: 5, min: 0, max: 5, required: true },
-    requests: { type: [Schema.Types.ObjectId], ref: 'Request' },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const BuyerSchema: Schema = new Schema(
-  {
-    rating: { type: Number, default: 5, min: 0, max: 5, required: true },
-    requested: { type: [Schema.Types.ObjectId], ref: 'Request' },
+    skills: [{ type: String, default: '' }],
   },
   {
     timestamps: true,
@@ -61,7 +48,6 @@ const UserSchema: Schema = new Schema(
       required: true,
     },
     sellerProfile: { type: SellerSchema, required: true },
-    buyerProfile: { type: BuyerSchema, required: true },
   },
   {
     timestamps: true,
