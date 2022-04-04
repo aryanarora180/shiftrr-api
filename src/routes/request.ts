@@ -1,8 +1,13 @@
 import express from 'express';
 import { isLoggedIn, isNotBanned } from '../utils/auth';
-import Request from '../models/request';
-
-import { requestStatus } from '../types/request';
+import {
+  createRequest,
+  deleteRequest,
+  getAllRequests,
+  getRequest,
+  updateRequest,
+} from '../controllers/request';
+import logger from '../utils/logger';
 
 const router = express.Router();
 
@@ -12,9 +17,15 @@ router.get(
   isNotBanned,
   async (_req: express.Request, res: express.Response) => {
     try {
-      const requests = await Request.find({});
-      return res.json(requests);
+      const getAllRequestsQuery = await getAllRequests();
+      if (getAllRequestsQuery.status) {
+        logger.info('[GET /api/requests] Got all requests succesfully!');
+        return res.json(getAllRequestsQuery.data);
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
+      logger.error('[GET /api/requests] Failed');
       return res.status(400).json({
         err: 'Could not fetch all requests',
       });
@@ -30,11 +41,17 @@ router.get(
     const id = req.params.id;
 
     try {
-      const request = await Request.findById(id);
-      return res.json(request);
+      const getRequestQuery = await getRequest(id);
+      if (getRequestQuery.status) {
+        logger.info(`[GET /api/requests/${id}] Got request succesfully!`);
+        return res.json(getRequestQuery.data);
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
+      logger.error(`[GET /api/requests/${id}] Failed`);
       return res.status(400).json({
-        err: 'Could not fetch the request with id: ' + id,
+        err: 'Unable to fetch request',
       });
     }
   }
@@ -47,21 +64,24 @@ router.post(
   async (req: express.Request, res: express.Response) => {
     const loggedInUser: any = req.user;
     const id = loggedInUser.id;
-    const { service, seller, price, information } = req.body;
-    const status = requestStatus.requested;
+    const { service, price, information } = req.body;
     try {
-      const request = await Request.create({
-        service: service,
-        seller: seller,
-        buyer: id,
-        price: price,
-        information: information,
-        status: status,
-      });
-      return res.json(request);
+      const createRequestQuery = await createRequest(
+        service,
+        id,
+        price,
+        information
+      );
+      if (createRequestQuery.status) {
+        logger.info(`[PUT /api/requests/] Created request succesfully!`);
+        return res.json(createRequestQuery.data);
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
+      logger.info(`[PUT /api/requests/] Failed`);
       return res.status(400).json({
-        err: e.message,
+        err: 'Unable to create request',
       });
     }
   }
@@ -75,24 +95,21 @@ router.put(
     const loggedInUser: any = req.user;
     const id = loggedInUser.id;
     const { request_id } = req.params;
-    const { status } = req.body;
 
     try {
-      const request = await Request.findById(request_id);
-      if (request != null && request.seller == id) {
-        await Request.findOneAndUpdate({ _id: request_id }, { status });
-        return res.json({
-          msg: 'Request updated',
-          data: await Request.findById(request_id),
-        });
+      const updateRequestQuery = await updateRequest(request_id, id, req.body);
+      if (updateRequestQuery.status) {
+        logger.info(
+          `[PUT /api/service/${request_id}] Updated request succesfully!`
+        );
+        return res.json(updateRequestQuery.data);
       } else {
-        return res.status(400).json({
-          err: 'You are not the seller of this request',
-        });
+        throw new Error();
       }
     } catch (e: any) {
+      logger.error(`[PUT /api/service/${request_id}] Failed`);
       return res.status(400).json({
-        err: 'User could not be deleted',
+        err: 'Request could not be updated',
       });
     }
   }
@@ -108,20 +125,21 @@ router.delete(
     const { request_id } = req.params;
 
     try {
-      const request = await Request.findById(request_id);
-      if (request != null && (request.buyer == id || request.seller == id)) {
-        await Request.findByIdAndDelete(request_id);
+      const deleteRequestQuery = await deleteRequest(request_id, id);
+      if (deleteRequestQuery.status) {
+        logger.info(
+          `[DELETE /api/requests/${request_id}] Deleted request succesfully!`
+        );
         return res.json({
           msg: 'Request deleted',
         });
       } else {
-        return res.status(400).json({
-          err: 'You are not the buyer or the seller of this request',
-        });
+        throw new Error();
       }
     } catch (e: any) {
+      logger.error(`[DELETE /api/requests/${request_id}] Failed`);
       return res.status(400).json({
-        err: 'User could not be deleted',
+        err: 'Unable to delete request',
       });
     }
   }

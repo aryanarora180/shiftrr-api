@@ -1,6 +1,11 @@
 import express from 'express';
 import { isLoggedIn, isAdminLoggedIn, isNotBanned } from '../utils/auth';
-import User from '../models/user';
+import {
+  deleteUser,
+  getAllUsers,
+  getUser,
+  updateUser,
+} from '../controllers/user';
 import logger from '../utils/logger';
 
 const router = express.Router();
@@ -11,9 +16,7 @@ router.get(
   isNotBanned,
   (req: express.Request, res: express.Response) => {
     logger.info('[GET /api/user/me] Got logged in user succesfully!');
-    return res.json({
-      msg: req.user,
-    });
+    return res.json(req.user);
   }
 );
 
@@ -24,13 +27,16 @@ router.put(
   async (req: express.Request, res: express.Response) => {
     const loggedInUser: any = req.user;
     const id = loggedInUser.id;
-    const data = req.body;
     try {
-      await User.findOneAndUpdate({ _id: id }, data);
-      logger.info('[PUT /api/user/me] Updated logged in user succesfully!');
-      return res.json(await User.findById(id));
+      const query = await updateUser(id, req.body);
+      if (query.status) {
+        logger.info('[PUT /api/user/me] Updated logged in user succesfully!');
+        return res.json(query.data);
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
-      logger.error(`[PUT /api/user/me] ${e.msg}`);
+      logger.error(`[PUT /api/user/me] Failed`);
       return res.status(400).json({
         err: 'User could not be updated',
       });
@@ -38,7 +44,6 @@ router.put(
   }
 );
 
-// TODO: When user deleted, delete associated services and requests
 router.delete(
   '/me',
   isLoggedIn,
@@ -47,13 +52,19 @@ router.delete(
     const loggedInUser: any = req.user;
     const id = loggedInUser.id;
     try {
-      await User.findOneAndDelete({ _id: id });
-      logger.info('[DELETE /api/user/me] Deleted logged in user succesfully!');
-      return res.json({
-        msg: 'User deleted',
-      });
+      const deleteUserQuery = await deleteUser(id);
+      if (deleteUserQuery.status) {
+        logger.info(
+          '[DELETE /api/user/me] Deleted logged in user succesfully!'
+        );
+        return res.json({
+          msg: 'User deleted',
+        });
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
-      logger.error(`[DELETE /api/user/me] ${e.msg}`);
+      logger.error(`[DELETE /api/user/me] Failed`);
       return res.status(400).json({
         err: 'User could not be deleted',
       });
@@ -67,11 +78,15 @@ router.get(
   isNotBanned,
   async (_req: express.Request, res: express.Response) => {
     try {
-      const users = await User.find();
-      logger.info('[GET /api/user/] Got all users succesfully!');
-      return res.json(users);
+      const allUsersQuery = await getAllUsers();
+      if (allUsersQuery.status) {
+        logger.info('[GET /api/user/] Got all users succesfully!');
+        return res.json(allUsersQuery.data);
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
-      logger.error(`[GET /api/user/] ${e.msg}`);
+      logger.error(`[GET /api/user/] Failed`);
       return res.status(400).json({
         err: 'Unable to fetch all users',
       });
@@ -86,13 +101,17 @@ router.get(
   async (req: express.Request, res: express.Response) => {
     const userId = req.params.userId;
     try {
-      const user = await User.findById(userId);
-      logger.info(`[GET /api/user/${userId}] Got user succesfully!`);
-      return res.json(user);
+      const getUserQuery = await getUser(userId);
+      if (getUserQuery.status) {
+        logger.info(`[GET /api/user/${userId}] Got user succesfully!`);
+        return res.json(getUserQuery.data);
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
-      logger.error(`[GET /api/user/${userId}] ${e.msg}`);
+      logger.error(`[GET /api/user/${userId}] Failed`);
       return res.status(400).json({
-        err: 'Invalid userId',
+        err: 'Unable to fetch user',
       });
     }
   }
@@ -103,15 +122,17 @@ router.put(
   isLoggedIn,
   isAdminLoggedIn,
   async (req: express.Request, res: express.Response) => {
-    const userId = req.params.userId;
-    const data = req.body;
+    const id = req.params.userId;
     try {
-      await User.findOneAndUpdate({ _id: userId }, data);
-      const updatedUser = await User.findById(userId);
-      logger.info(`[PUT /api/user/${userId}] Updated user successfully`);
-      return res.json(updatedUser);
+      const updateUserQuery = await updateUser(id, req.body);
+      if (updateUserQuery.status) {
+        logger.info(`[PUT /api/user/${id}] Updated user successfully`);
+        return res.json(updateUserQuery.data);
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
-      logger.error(`[PUT /api/user/${userId}] ${e.msg}`);
+      logger.error(`[PUT /api/user/${id}] Failed`);
       return res.status(400).json({
         err: 'User could not be updated',
       });
@@ -119,21 +140,24 @@ router.put(
   }
 );
 
-// TODO: When user deleted, delete associated services and requests
 router.delete(
   '/:userId',
   isLoggedIn,
   isAdminLoggedIn,
   async (req: express.Request, res: express.Response) => {
-    const userId = req.params.userId;
+    const id = req.params.userId;
     try {
-      await User.findOneAndDelete({ _id: userId });
-      logger.info(`[DELETE /api/user/${userId}] Deleted user successfully`);
-      return res.json({
-        msg: 'User deleted',
-      });
+      const deleteUserQuery = await deleteUser(id);
+      if (deleteUserQuery.status) {
+        logger.info(`[DELETE /api/user/${id}] Deleted user successfully`);
+        return res.json({
+          msg: 'User deleted',
+        });
+      } else {
+        throw new Error();
+      }
     } catch (e: any) {
-      logger.error(`[DELETE /api/user/${userId}] ${e.msg}`);
+      logger.error(`[DELETE /api/user/${id}] Failed`);
       return res.status(400).json({
         err: 'User could not be deleted',
       });

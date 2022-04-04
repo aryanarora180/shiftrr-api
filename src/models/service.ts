@@ -7,8 +7,8 @@ const ServiceSchema: Schema = new Schema(
     seller: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
-    startingPrice: { type: Number, required: true },
-    rating: { type: Number, default: 5, min: 0, max: 5, required: true },
+    image: { type: String, trim: true },
+    startingPrice: { type: Number, min: 0, required: true },
   },
   {
     timestamps: true,

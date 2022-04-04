@@ -1,6 +1,5 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-import IBuyer from './buyer';
 import ISeller from './seller';
 
 export const enum userStatus {
@@ -26,5 +25,4 @@ export default interface IUser {
   status: userStatus;
   role: userRole;
   sellerProfile: ISeller;
-  buyerProfile: IBuyer;
 }

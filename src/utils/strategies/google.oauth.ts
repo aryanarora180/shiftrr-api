@@ -30,13 +30,8 @@ export const GoogleOAuthStrategy = new GoogleStrategy(
           bio: '',
           credits: 1000,
           sellerProfile: {
-            services: [],
-            skills: [],
-            requests: [],
             domain: '',
-          },
-          buyerProfile: {
-            requested: [],
+            skills: [],
           },
         });
         await newUser.save();
