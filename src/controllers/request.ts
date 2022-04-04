@@ -12,7 +12,8 @@ export const getAllRequests = async () => {
             path: 'seller',
           },
         })
-        .populate('buyer'),
+        .populate('buyer')
+        .exec(),
     };
   } catch (e: any) {
     return {
@@ -21,18 +22,26 @@ export const getAllRequests = async () => {
   }
 };
 
-export const getRequest = async (id: string) => {
+export const getRequest = async (_id: string) => {
   try {
-    const request = await Request.findOne({ _id: new ObjectId(id) })
-      .populate('service')
-      .populate('buyer');
+    const request = await Request.findOne({ _id })
+      .populate({
+        path: 'service',
+        populate: {
+          path: 'seller',
+        },
+      })
+      .populate('buyer')
+      .exec();
     if (request) {
       return {
         status: true,
         data: request,
       };
     } else {
-      throw new Error();
+      return {
+        status: false,
+      };
     }
   } catch (e: any) {
     return {
@@ -61,7 +70,9 @@ export const createRequest = async (
         data: request,
       };
     } else {
-      throw new Error();
+      return {
+        status: false,
+      };
     }
   } catch (e: any) {
     return {
@@ -89,10 +100,14 @@ export const updateRequest = async (
           data: (await getRequest(id)).data,
         };
       } else {
-        throw new Error();
+        return {
+          status: false,
+        };
       }
     } else {
-      throw new Error();
+      return {
+        status: false,
+      };
     }
   } catch (e: any) {
     return {
@@ -116,10 +131,14 @@ export const deleteRequest = async (id: string, deletingUserId: string) => {
           status: true,
         };
       } else {
-        throw new Error();
+        return {
+          status: false,
+        };
       }
     } else {
-      throw new Error();
+      return {
+        status: false,
+      };
     }
   } catch (e: any) {
     return {

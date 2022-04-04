@@ -1,11 +1,10 @@
-import { ObjectId } from 'mongodb';
 import Service from '../models/service';
 
 export const getAllServices = async () => {
   try {
     return {
       status: true,
-      data: await Service.find().populate('seller'),
+      data: await Service.find().populate('seller').exec(),
     };
   } catch (e: any) {
     return {
@@ -14,18 +13,18 @@ export const getAllServices = async () => {
   }
 };
 
-export const getService = async (id: string) => {
+export const getService = async (_id: string) => {
   try {
-    const service = await Service.findOne({ _id: new ObjectId(id) }).populate(
-      'seller'
-    );
+    const service = await Service.findOne({ _id }).populate('seller').exec();
     if (service) {
       return {
         status: true,
         data: service,
       };
     } else {
-      throw new Error();
+      return {
+        status: false,
+      };
     }
   } catch (e: any) {
     return {
@@ -50,14 +49,10 @@ export const createService = async (
       startingPrice,
     });
     await service.save();
-    if (service) {
-      return {
-        status: true,
-        data: service,
-      };
-    } else {
-      throw new Error();
-    }
+    return {
+      status: true,
+      data: service,
+    };
   } catch (e: any) {
     return {
       status: false,
@@ -66,27 +61,25 @@ export const createService = async (
 };
 
 export const updateService = async (
-  id: string,
+  _id: string,
   updatingUserId: string,
   data: any
 ) => {
   try {
     const service = await Service.findOne({
-      _id: new ObjectId(id),
-      seller: new ObjectId(updatingUserId),
+      _id,
+      seller: updatingUserId,
     });
     if (service) {
-      try {
-        await service.updateOne(data);
-        return {
-          status: true,
-          data: (await getService(id)).data,
-        };
-      } catch (e: any) {
-        throw new Error();
-      }
+      await service.updateOne(data);
+      return {
+        status: true,
+        data: service,
+      };
     } else {
-      throw new Error();
+      return {
+        status: false,
+      };
     }
   } catch (e: any) {
     return {
@@ -95,11 +88,11 @@ export const updateService = async (
   }
 };
 
-export const deleteService = async (id: string, deletingUserId: string) => {
+export const deleteService = async (_id: string, deletingUserId: string) => {
   try {
     const service = await Service.findOne({
-      _id: new ObjectId(id),
-      seller: new ObjectId(deletingUserId),
+      _id,
+      seller: deletingUserId,
     });
     if (service) {
       await service.deleteOne();
@@ -107,7 +100,9 @@ export const deleteService = async (id: string, deletingUserId: string) => {
         status: true,
       };
     } else {
-      throw new Error();
+      return {
+        status: false,
+      };
     }
   } catch (e: any) {
     return {

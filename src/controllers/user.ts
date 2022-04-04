@@ -1,11 +1,10 @@
-import { ObjectId } from 'mongodb';
 import User from '../models/user';
 
 export const getAllUsers = async () => {
   try {
     return {
       status: true,
-      data: await User.find(),
+      data: await User.find().exec(),
     };
   } catch (e: any) {
     return {
@@ -14,16 +13,18 @@ export const getAllUsers = async () => {
   }
 };
 
-export const getUser = async (id: string) => {
+export const getUser = async (_id: string) => {
   try {
-    const user = await User.findOne({ _id: new ObjectId(id) });
+    const user = await User.findOne({ _id }).exec();
     if (user) {
       return {
         status: true,
         data: user,
       };
     } else {
-      throw new Error();
+      return {
+        status: false,
+      };
     }
   } catch (e: any) {
     return {
@@ -32,28 +33,44 @@ export const getUser = async (id: string) => {
   }
 };
 
-export const updateUser = async (id: string, data: any) => {
+export const updateUser = async (_id: string, data: any) => {
   try {
-    await User.findOneAndUpdate({ _id: new ObjectId(id) }, data);
-    return {
-      status: true,
-      data: (await getUser(id)).data,
-    };
+    const user = await User.findOne({ _id }).exec();
+    if (user) {
+      await user.updateOne(data);
+      return {
+        status: true,
+        data: user,
+      };
+    } else {
+      return { status: false };
+    }
   } catch (e: any) {
     return { status: false };
   }
 };
 
-export const deleteUser = async (id: string) => {
+export const deleteUser = async (_id: string) => {
   try {
-    await User.findOneAndDelete({ _id: new ObjectId(id) });
-    return { status: true };
+    const user = await User.findOne({ _id }).exec();
+    if (user) {
+      await user.deleteOne();
+      return {
+        status: true,
+      };
+    } else {
+      return {
+        status: false,
+      };
+    }
   } catch (e: any) {
-    return { status: false };
+    return {
+      status: false,
+    };
   }
 };
 
 // TODO: Implement this method
-export const getServicesOfUser = async (id: string) => {
+export const getServicesOfUser = async (_id: string) => {
   // returns array of services that user is offering
 };
