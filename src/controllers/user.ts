@@ -1,4 +1,6 @@
 import User from '../models/user';
+import Service from '../models/service';
+import Request from '../models/request';
 
 export const getAllUsers = async () => {
   try {
@@ -70,7 +72,28 @@ export const deleteUser = async (_id: string) => {
   }
 };
 
-// TODO: Implement this method
 export const getServicesOfUser = async (_id: string) => {
-  // returns array of services that user is offering
+  try {
+    return {
+      status: true,
+      data: await Service.find({ seller: _id }).exec(),
+    };
+  } catch (e: any) {
+    return {
+      status: false,
+    };
+  }
+};
+
+export const getRequestsOfUser = async (_id: string) => {
+  try {
+    return {
+      status: true,
+      data: await Request.find({ buyer: _id }).exec(),
+    };
+  } catch (e: any) {
+    return {
+      status: false,
+    };
+  }
 };

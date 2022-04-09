@@ -5,6 +5,8 @@ import {
   getAllUsers,
   getUser,
   updateUser,
+  getServicesOfUser,
+  getRequestsOfUser,
 } from '../controllers/user';
 import logger from '../utils/logger';
 
@@ -94,6 +96,46 @@ router.get(
       logger.error(`[GET /api/user/${userId}] Failed`);
       return res.status(400).json({
         err: 'Unable to fetch user',
+      });
+    }
+  }
+);
+
+router.get(
+  '/:userId/services',
+  isLoggedIn,
+  async (req: express.Request, res: express.Response) => {
+    const id = req.params.userId;
+    const getUserServicesQuery = await getServicesOfUser(id);
+    if (getUserServicesQuery.status) {
+      logger.info(
+        `[GET /api/user/${id}/services] Got user's offered services successfully`
+      );
+      return res.json(getUserServicesQuery.data);
+    } else {
+      logger.error(`[GET /api/user/${id}/services] Failed`);
+      return res.status(400).json({
+        err: "Could not get user's offered services",
+      });
+    }
+  }
+);
+
+router.get(
+  '/:userId/requests',
+  isLoggedIn,
+  async (req: express.Request, res: express.Response) => {
+    const id = req.params.userId;
+    const getUserRequestsQuery = await getRequestsOfUser(id);
+    if (getUserRequestsQuery.status) {
+      logger.info(
+        `[GET /api/user/${id}/requests] Got user's requests successfully`
+      );
+      return res.json(getUserRequestsQuery.data);
+    } else {
+      logger.error(`[GET /api/user/${id}/requests] Failed`);
+      return res.status(400).json({
+        err: "Could not get user's requests",
       });
     }
   }
