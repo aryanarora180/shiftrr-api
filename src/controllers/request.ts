@@ -1,18 +1,16 @@
 import { ObjectId } from 'mongodb';
+import { IService } from 'src/types';
 import Request from '../models/request';
+import Service from '../models/service';
 
 export const getAllRequests = async () => {
   try {
     return {
       status: true,
       data: await Request.find()
-        .populate({
-          path: 'service',
-          populate: {
-            path: 'seller',
-          },
-        })
+        .populate('service')
         .populate('buyer')
+        .populate('seller')
         .exec(),
     };
   } catch (e: any) {
@@ -25,13 +23,9 @@ export const getAllRequests = async () => {
 export const getRequest = async (_id: string) => {
   try {
     const request = await Request.findOne({ _id })
-      .populate({
-        path: 'service',
-        populate: {
-          path: 'seller',
-        },
-      })
+      .populate('service')
       .populate('buyer')
+      .populate('seller')
       .exec();
     if (request) {
       return {
@@ -57,13 +51,25 @@ export const createRequest = async (
   information: string
 ) => {
   try {
+    const populatedService: IService | null = await Service.findOne({
+      _id: service,
+    });
+
+    if (!populatedService) {
+      return {
+        status: false,
+      };
+    }
+
     const request = new Request({
       service,
       buyer,
+      seller: populatedService.seller,
       price,
       information,
     });
     await request.save();
+
     if (request) {
       return {
         status: true,

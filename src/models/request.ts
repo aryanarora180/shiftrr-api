@@ -6,6 +6,7 @@ const RequestsSchema: Schema = new Schema(
   {
     service: { type: Schema.Types.ObjectId, ref: 'Service', required: true },
     buyer: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    seller: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     price: { type: Number, required: true },
     information: { type: String, required: true },
     status: {

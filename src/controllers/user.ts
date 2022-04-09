@@ -76,7 +76,7 @@ export const getServicesOfUser = async (_id: string) => {
   try {
     return {
       status: true,
-      data: await Service.find({ seller: _id }).exec(),
+      data: await Service.find({ seller: _id }).populate('seller').exec(),
     };
   } catch (e: any) {
     return {
@@ -89,7 +89,28 @@ export const getRequestsOfUser = async (_id: string) => {
   try {
     return {
       status: true,
-      data: await Request.find({ buyer: _id }).exec(),
+      data: await Request.find({ seller: _id })
+        .populate('service')
+        .populate('buyer')
+        .populate('seller')
+        .exec(),
+    };
+  } catch (e: any) {
+    return {
+      status: false,
+    };
+  }
+};
+
+export const getRequestedByUser = async (_id: string) => {
+  try {
+    return {
+      status: true,
+      data: await Request.find({ buyer: _id })
+        .populate('service')
+        .populate('buyer')
+        .populate('seller')
+        .exec(),
     };
   } catch (e: any) {
     return {

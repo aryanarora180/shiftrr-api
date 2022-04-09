@@ -7,6 +7,7 @@ import {
   updateUser,
   getServicesOfUser,
   getRequestsOfUser,
+  getRequestedByUser,
 } from '../controllers/user';
 import logger from '../utils/logger';
 
@@ -127,6 +128,26 @@ router.get(
   async (req: express.Request, res: express.Response) => {
     const id = req.params.userId;
     const getUserRequestsQuery = await getRequestsOfUser(id);
+    if (getUserRequestsQuery.status) {
+      logger.info(
+        `[GET /api/user/${id}/requests] Got user's requests successfully`
+      );
+      return res.json(getUserRequestsQuery.data);
+    } else {
+      logger.error(`[GET /api/user/${id}/requests] Failed`);
+      return res.status(400).json({
+        err: "Could not get user's requests",
+      });
+    }
+  }
+);
+
+router.get(
+  '/:userId/requested',
+  isLoggedIn,
+  async (req: express.Request, res: express.Response) => {
+    const id = req.params.userId;
+    const getUserRequestsQuery = await getRequestedByUser(id);
     if (getUserRequestsQuery.status) {
       logger.info(
         `[GET /api/user/${id}/requests] Got user's requests successfully`
