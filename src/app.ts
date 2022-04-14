@@ -25,6 +25,7 @@ import {
   userRouter,
   requestRouter,
   serviceRouter,
+  sellerReviewRouter,
 } from './routes';
 import { IUser } from './types';
 
@@ -114,6 +115,7 @@ const app = express();
   app.use('/api/user', userRouter);
   app.use('/api/requests', requestRouter);
   app.use('/api/service', serviceRouter);
+  app.use('/api/reviews/seller', sellerReviewRouter);
 
   app.use(
     (

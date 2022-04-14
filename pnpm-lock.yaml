@@ -24,7 +24,7 @@ specifiers:
   express: ^4.17.2
   express-session: ^1.17.2
   helmet: ^5.0.2
-  husky: ^7.0.0
+  husky: ^7.0.4
   jest: ^27.5.1
   mocha: ^9.2.0
   mongodb: ^4.3.1
