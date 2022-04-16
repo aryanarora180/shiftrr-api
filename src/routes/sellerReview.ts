@@ -108,10 +108,11 @@ router.post(
     const loggedInUser: any = req.user;
     const loggedInUserId = loggedInUser.id;
 
+    // TODO: Verify that the current user is the buyer of the request;
+    // Can pass current logged in user's id to the controller method and check that the buyer id is the same as logged in user's id
     const { request_id, comment, rating } = req.body;
     const createSellerReviewQuery = await createSellerReview(
       request_id,
-      loggedInUserId,
       comment,
       rating
     );

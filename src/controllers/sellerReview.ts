@@ -6,9 +6,10 @@ export const getAllSellerReviews = async () => {
     return {
       status: true,
       data: await SellerReview.find()
-        .populate('target')
-        .populate('poster')
+        .populate('seller')
+        .populate('buyer')
         .populate('request')
+        .populate('service')
         .exec(),
     };
   } catch (e: any) {
@@ -21,9 +22,10 @@ export const getAllSellerReviews = async () => {
 export const getSellerReviewById = async (_id: string) => {
   try {
     const review = await SellerReview.findOne({ _id })
-      .populate('target')
-      .populate('poster')
+      .populate('seller')
+      .populate('buyer')
       .populate('request')
+      .populate('service')
       .exec();
     if (review) {
       return {
@@ -46,10 +48,11 @@ export const getSellerReviewsBySellerUser = async (seller_id: string) => {
   try {
     return {
       status: true,
-      data: await SellerReview.find({ target: seller_id })
-        .populate('target')
-        .populate('poster')
+      data: await SellerReview.find({ seller: seller_id })
+        .populate('seller')
+        .populate('buyer')
         .populate('request')
+        .populate('service')
         .exec(),
     };
   } catch (e: any) {
@@ -63,10 +66,11 @@ export const getSellerReviewsByPostingUser = async (user_id: string) => {
   try {
     return {
       status: true,
-      data: await SellerReview.find({ poster: user_id })
-        .populate('target')
-        .populate('poster')
+      data: await SellerReview.find({ buyer: user_id })
+        .populate('seller')
+        .populate('buyer')
         .populate('request')
+        .populate('service')
         .exec(),
     };
   } catch (e: any) {
@@ -78,18 +82,19 @@ export const getSellerReviewsByPostingUser = async (user_id: string) => {
 
 export const createSellerReview = async (
   request: string,
-  poster: string,
   comment: string,
   rating: number
 ) => {
   try {
-    const serviceRequest = await Request.findOne({
+    const populatedRequest = await Request.findOne({
       _id: request,
     }).exec();
-    if (serviceRequest?.seller !== null) {
+
+    if (populatedRequest?.seller !== null) {
       const review = new SellerReview({
-        target: serviceRequest?.seller,
-        poster: poster,
+        seller: populatedRequest?.seller,
+        buyer: populatedRequest?.buyer,
+        service: populatedRequest?.service,
         request: request,
         comment: comment,
         rating: rating,
@@ -119,7 +124,7 @@ export const deleteSellerReview = async (
   try {
     const review = await SellerReview.findOne({
       _id,
-      poster: deletingUserId,
+      buyer: deletingUserId,
     });
     if (review) {
       await review.deleteOne();

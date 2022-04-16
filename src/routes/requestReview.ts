@@ -4,8 +4,9 @@ import {
   deleteRequestReview,
   getAllRequestReviews,
   getRequestReviewById,
-  getRequestReviewsByPostingUser,
-  getRequestReviewsByTarget,
+  getRequestReviewsByBuyer,
+  getRequestReviewsByRequest,
+  getRequestReviewsByService,
 } from '../controllers/requestReview';
 import { isLoggedIn, isNotBanned } from '../utils/auth';
 import logger from '../utils/logger';
@@ -62,7 +63,7 @@ router.get(
   isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const id = req.params.requestId;
-    const getRequestReviewQuery = await getRequestReviewsByTarget(id);
+    const getRequestReviewQuery = await getRequestReviewsByRequest(id);
     if (getRequestReviewQuery.status) {
       logger.info(
         `[GET /api/reviews/request/ofrequest/${id}] Got requestReview succesfully!`
@@ -77,6 +78,28 @@ router.get(
   }
 );
 
+// Get requestReviews of a specific Service
+router.get(
+  '/ofservice/:serviceId',
+  isLoggedIn,
+  isNotBanned,
+  async (req: express.Request, res: express.Response) => {
+    const id = req.params.serviceId;
+    const getRequestReviewQuery = await getRequestReviewsByService(id);
+    if (getRequestReviewQuery.status) {
+      logger.info(
+        `[GET /api/reviews/request/ofservice/${id}] Got requestReview succesfully!`
+      );
+      return res.json(getRequestReviewQuery.data);
+    } else {
+      logger.error(`[GET /api/reviews/request/ofservice/${id}] Failed`);
+      return res.status(400).json({
+        err: 'Unable to fetch requestReview',
+      });
+    }
+  }
+);
+
 // Get requestReviews by Posting User
 router.get(
   '/byuser/:posterId',
@@ -84,7 +107,7 @@ router.get(
   isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const id = req.params.posterId;
-    const getRequestReviewQuery = await getRequestReviewsByPostingUser(id);
+    const getRequestReviewQuery = await getRequestReviewsByBuyer(id);
     if (getRequestReviewQuery.status) {
       logger.info(
         `[GET /api/reviews/request//byuser/${id}] Got requestReview succesfully!`
@@ -109,9 +132,11 @@ router.post(
     const loggedInUserId = loggedInUser.id;
 
     const { request_id, comment, rating } = req.body;
+
+    // TODO: Verify that the current user is the buyer of the request;
+    // Can pass current logged in user's id to the controller method and check that the buyer id is the same as logged in user's id
     const createRequestReviewQuery = await createRequestReview(
       request_id,
-      loggedInUserId,
       comment,
       rating
     );
