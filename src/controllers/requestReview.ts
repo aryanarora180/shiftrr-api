@@ -1,14 +1,12 @@
-import SellerReview from '../models/sellerReview';
-import Request from '../models/request';
+import RequestReview from '../models/requestReview';
 
-export const getAllSellerReviews = async () => {
+export const getAllRequestReviews = async () => {
   try {
     return {
       status: true,
-      data: await SellerReview.find()
+      data: await RequestReview.find()
         .populate('target')
         .populate('poster')
-        .populate('request')
         .exec(),
     };
   } catch (e: any) {
@@ -18,12 +16,11 @@ export const getAllSellerReviews = async () => {
   }
 };
 
-export const getSellerReviewById = async (_id: string) => {
+export const getRequestReviewById = async (_id: string) => {
   try {
-    const review = await SellerReview.findOne({ _id })
+    const review = await RequestReview.findOne({ _id })
       .populate('target')
       .populate('poster')
-      .populate('request')
       .exec();
     if (review) {
       return {
@@ -42,14 +39,13 @@ export const getSellerReviewById = async (_id: string) => {
   }
 };
 
-export const getSellerReviewsBySellerUser = async (seller_id: string) => {
+export const getRequestReviewsByTarget = async (targetId: string) => {
   try {
     return {
       status: true,
-      data: await SellerReview.find({ target: seller_id })
+      data: await RequestReview.find({ target: targetId })
         .populate('target')
         .populate('poster')
-        .populate('request')
         .exec(),
     };
   } catch (e: any) {
@@ -59,14 +55,13 @@ export const getSellerReviewsBySellerUser = async (seller_id: string) => {
   }
 };
 
-export const getSellerReviewsByPostingUser = async (user_id: string) => {
+export const getRequestReviewsByPostingUser = async (posterId: string) => {
   try {
     return {
       status: true,
-      data: await SellerReview.find({ poster: user_id })
+      data: await RequestReview.find({ poster: posterId })
         .populate('target')
         .populate('poster')
-        .populate('request')
         .exec(),
     };
   } catch (e: any) {
@@ -76,35 +71,24 @@ export const getSellerReviewsByPostingUser = async (user_id: string) => {
   }
 };
 
-export const createSellerReview = async (
-  request: string,
+export const createRequestReview = async (
+  target: string,
   poster: string,
   comment: string,
   rating: number
 ) => {
   try {
-    const serviceRequest = await Request.findOne({
-      _id: request,
-    }).exec();
-    if (serviceRequest?.seller !== null) {
-      const review = new SellerReview({
-        target: serviceRequest?.seller,
-        poster: poster,
-        request: request,
-        comment: comment,
-        rating: rating,
-      });
-      await review.save();
-
-      return {
-        status: true,
-        data: review,
-      };
-    } else {
-      return {
-        status: false,
-      };
-    }
+    const review = new RequestReview({
+      target,
+      poster,
+      comment,
+      rating,
+    });
+    await review.save();
+    return {
+      status: true,
+      data: review,
+    };
   } catch (e: any) {
     return {
       status: false,
@@ -112,12 +96,12 @@ export const createSellerReview = async (
   }
 };
 
-export const deleteSellerReview = async (
+export const deleteRequestReview = async (
   _id: string,
   deletingUserId: string
 ) => {
   try {
-    const review = await SellerReview.findOne({
+    const review = await RequestReview.findOne({
       _id,
       poster: deletingUserId,
     });

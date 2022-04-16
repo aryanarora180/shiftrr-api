@@ -4,9 +4,9 @@ import logger from '../utils/logger';
 import {
   getAllSellerReviews,
   createSellerReview,
-  getSellerReview,
-  getSellerReviews,
-  getPosterSellerReviews,
+  getSellerReviewById,
+  getSellerReviewsBySellerUser,
+  getSellerReviewsByPostingUser,
   deleteSellerReview,
 } from '../controllers/sellerReview';
 
@@ -20,12 +20,14 @@ router.get(
   async (_req: express.Request, res: express.Response) => {
     const getAllReviewsQuery = await getAllSellerReviews();
     if (getAllReviewsQuery.status) {
-      logger.info('[GET /api/reviews/seller] Got all requests succesfully!');
+      logger.info(
+        '[GET /api/reviews/seller] Got all sellerReviews succesfully!'
+      );
       return res.json(getAllReviewsQuery.data);
     } else {
       logger.error('[GET /api/reviews/seller] Failed');
       return res.status(400).json({
-        err: 'Could not fetch all requests',
+        err: 'Could not fetch all sellerReviews',
       });
     }
   }
@@ -38,14 +40,16 @@ router.get(
   isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const id = req.params.sellerReviewId;
-    const getReviewQuery = await getSellerReview(id);
+    const getReviewQuery = await getSellerReviewById(id);
     if (getReviewQuery.status) {
-      logger.info(`[GET /api/reviews/seller/${id}] Got review succesfully!`);
+      logger.info(
+        `[GET /api/reviews/seller/${id}] Got sellerReview succesfully!`
+      );
       return res.json(getReviewQuery.data);
     } else {
       logger.error(`[GET /api/reviews/seller/${id}] Failed`);
       return res.status(400).json({
-        err: 'Unable to fetch review',
+        err: 'Unable to fetch sellerReview',
       });
     }
   }
@@ -58,16 +62,16 @@ router.get(
   isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const id = req.params.sellerId;
-    const getReviewsQuery = await getSellerReviews(id);
+    const getReviewsQuery = await getSellerReviewsBySellerUser(id);
     if (getReviewsQuery.status) {
       logger.info(
-        `[GET /api/reviews/seller/ofseller/${id}] Got reviews succesfully!`
+        `[GET /api/reviews/seller/ofseller/${id}] Got sellerReviews succesfully!`
       );
       return res.json(getReviewsQuery.data);
     } else {
       logger.error(`[GET /api/reviews/seller/ofseller/${id}] Failed`);
       return res.status(400).json({
-        err: 'Unable to fetch reviews',
+        err: 'Unable to fetch sellerReviews',
       });
     }
   }
@@ -80,16 +84,16 @@ router.get(
   isNotBanned,
   async (req: express.Request, res: express.Response) => {
     const id = req.params.userId;
-    const getReviewsQuery = await getPosterSellerReviews(id);
+    const getReviewsQuery = await getSellerReviewsByPostingUser(id);
     if (getReviewsQuery.status) {
       logger.info(
-        `[GET /api/reviews/seller/byuser/${id}] Got reviews succesfully!`
+        `[GET /api/reviews/seller/byuser/${id}] Got sellerReviews succesfully!`
       );
       return res.json(getReviewsQuery.data);
     } else {
       logger.error(`[GET /api/reviews/seller/byuser/${id}] Failed`);
       return res.status(400).json({
-        err: 'Unable to fetch reviews',
+        err: 'Unable to fetch sellerReviews',
       });
     }
   }
@@ -114,13 +118,13 @@ router.post(
 
     if (createSellerReviewQuery.status) {
       logger.info(
-        "[POST /api/reviews/seller] Created seller's review succesfully!"
+        '[POST /api/reviews/seller] Created sellerReview succesfully!'
       );
       return res.json(createSellerReviewQuery.data);
     } else {
       logger.error(`[POST /api/reviews/seller] Failed`);
       return res.status(400).json({
-        err: 'Unable to create review',
+        err: 'Unable to create sellerReview',
       });
     }
   }
@@ -139,7 +143,7 @@ router.delete(
     const deleteReviewQuery = await deleteSellerReview(sellerReviewId, userId);
     if (deleteReviewQuery.status) {
       logger.info(
-        `[DELETE /api/reviews/seller/${sellerReviewId}] Deleted review succesfully!`
+        `[DELETE /api/reviews/seller/${sellerReviewId}] Deleted sellerReviews succesfully!`
       );
       return res.json({
         msg: 'Review deleted',
@@ -147,7 +151,7 @@ router.delete(
     } else {
       logger.error(`[DELETE /api/reviews/seller/${sellerReviewId}] Failed`);
       return res.status(400).json({
-        err: 'Service could not be deleted',
+        err: 'sellerReview could not be deleted',
       });
     }
   }

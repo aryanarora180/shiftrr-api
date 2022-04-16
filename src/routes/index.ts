@@ -4,6 +4,7 @@ import userRouter from './user';
 import requestRouter from './request';
 import serviceRouter from './service';
 import sellerReviewRouter from './sellerReview';
+import requestReviewRouter from './requestReview';
 
 export {
   authRouter,
@@ -12,4 +13,5 @@ export {
   serviceRouter,
   requestRouter,
   sellerReviewRouter,
+  requestReviewRouter,
 };

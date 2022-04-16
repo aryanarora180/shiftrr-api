@@ -13,4 +13,4 @@ const BuyerReviewSchema: Schema = new Schema(
   }
 );
 
-export default mongoose.model<IBuyerReview>('Service', BuyerReviewSchema);
+export default mongoose.model<IBuyerReview>('BuyerReview', BuyerReviewSchema);
