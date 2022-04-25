@@ -5,6 +5,7 @@ import type IUser from './user';
 import IBuyerReview from './buyerReview';
 import ISellerReview from './sellerReview';
 import IRequestReview from './requestReview';
+import IPageHit from './pageHit';
 import { userStatus, userRole } from './user';
 import { requestStatus } from './request';
 
@@ -16,5 +17,6 @@ export type {
   IBuyerReview,
   ISellerReview,
   IRequestReview,
+  IPageHit,
 };
 export { userStatus, userRole, requestStatus };

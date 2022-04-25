@@ -28,6 +28,7 @@ import {
   sellerReviewRouter,
   requestReviewRouter,
   buyerReviewRouter,
+  pageHitsRouter,
 } from './routes';
 import { IUser } from './types';
 
@@ -120,6 +121,7 @@ const app = express();
   app.use('/api/reviews/seller', sellerReviewRouter);
   app.use('/api/reviews/buyer', buyerReviewRouter);
   app.use('/api/reviews/request', requestReviewRouter);
+  app.use('/api/pagehits', pageHitsRouter);
 
   app.use(
     (

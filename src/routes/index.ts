@@ -6,6 +6,7 @@ import serviceRouter from './service';
 import buyerReviewRouter from './buyerReview';
 import sellerReviewRouter from './sellerReview';
 import requestReviewRouter from './requestReview';
+import pageHitsRouter from './pageHit';
 
 export {
   authRouter,
@@ -16,4 +17,5 @@ export {
   buyerReviewRouter,
   sellerReviewRouter,
   requestReviewRouter,
+  pageHitsRouter,
 };
