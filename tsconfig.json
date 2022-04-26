@@ -24,6 +24,6 @@
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*.ts", "src/**/*.json", "test"],
+  "include": ["src/**/*.ts", "src/**/*.json", "tests"],
   "exclude": ["node_modules"]
 }

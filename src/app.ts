@@ -20,7 +20,6 @@ import logger from './utils/logger';
 import { GoogleOAuthStrategy } from './utils/strategies/google.oauth';
 import User from './models/user';
 import {
-  testRouter,
   authRouter,
   userRouter,
   requestRouter,
@@ -114,7 +113,6 @@ const app = express();
   app.use('/auth', authRouter); // Auth Client Routes
 
   // API Routes
-  app.use('/api/test', testRouter);
   app.use('/api/user', userRouter);
   app.use('/api/requests', requestRouter);
   app.use('/api/service', serviceRouter);
