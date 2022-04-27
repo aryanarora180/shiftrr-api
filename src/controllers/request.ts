@@ -44,6 +44,40 @@ export const getRequest = async (_id: string) => {
   }
 };
 
+export const getRequestsOfUser = async (_id: string) => {
+  try {
+    return {
+      status: true,
+      data: await Request.find({ seller: _id })
+        .populate('service')
+        .populate('buyer')
+        .populate('seller')
+        .exec(),
+    };
+  } catch (e: any) {
+    return {
+      status: false,
+    };
+  }
+};
+
+export const getRequestedByUser = async (_id: string) => {
+  try {
+    return {
+      status: true,
+      data: await Request.find({ buyer: _id })
+        .populate('service')
+        .populate('buyer')
+        .populate('seller')
+        .exec(),
+    };
+  } catch (e: any) {
+    return {
+      status: false,
+    };
+  }
+};
+
 export const createRequest = async (
   service: string,
   buyer: string,

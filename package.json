@@ -10,7 +10,7 @@
     "format": "prettier --write --config .prettierrc --no-error-on-unmatched-pattern \"**/*.{ts,js,json}\"",
     "lint": "eslint \"**/*.ts\" --quiet --fix",
     "postinstall": "husky install",
-    "test": "jest --runInBand ./test"
+    "test": "jest --runInBand --coverage"
   },
   "husky": {
     "pre-commit": "format",

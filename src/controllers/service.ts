@@ -33,6 +33,19 @@ export const getService = async (_id: string) => {
   }
 };
 
+export const getServicesOfUser = async (_id: string) => {
+  try {
+    return {
+      status: true,
+      data: await Service.find({ seller: _id }).populate('seller').exec(),
+    };
+  } catch (e: any) {
+    return {
+      status: false,
+    };
+  }
+};
+
 export const createService = async (
   seller: string,
   name: string,

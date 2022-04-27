@@ -5,10 +5,9 @@ import {
   getAllUsers,
   getUser,
   updateUser,
-  getServicesOfUser,
-  getRequestsOfUser,
-  getRequestedByUser,
 } from '../controllers/user';
+import { getServicesOfUser } from '../controllers/service';
+import { getRequestsOfUser, getRequestedByUser } from '../controllers/request';
 import logger from '../utils/logger';
 
 const router = express.Router();
