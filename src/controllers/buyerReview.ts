@@ -62,11 +62,12 @@ export const getBuyerReviewsByBuyerUser = async (buyer_id: string) => {
   }
 };
 
+// Posting User = Seller User
 export const getBuyerReviewsByPostingUser = async (user_id: string) => {
   try {
     return {
       status: true,
-      data: await BuyerReview.find({ buyer: user_id })
+      data: await BuyerReview.find({ seller: user_id })
         .populate('seller')
         .populate('buyer')
         .populate('request')
