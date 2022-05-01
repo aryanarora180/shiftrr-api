@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
-import BuyerReview from '../../src/models/buyerReview';
+import SellerReview from '../../src/models/sellerReview';
 
 import {
   mockBuyerUser,
@@ -10,7 +10,7 @@ import {
   mockBuyerRequest,
 } from '../helpers/review';
 
-describe('Model: BuyerReview', () => {
+describe('Model: SellerReview', () => {
   let mongoServer: MongoMemoryServer;
 
   beforeAll(async () => {
@@ -25,38 +25,37 @@ describe('Model: BuyerReview', () => {
   });
 
   it('Should be able to create', async () => {
-    const buyerReview = new BuyerReview({
+    const sellerReview = new SellerReview({
       request: mockBuyerRequest._id,
       service: mockSellerService._id,
       seller: mockSellerUser._id,
       buyer: mockBuyerUser._id,
-      comment: 'Nice buyer',
-      rating: 4.2,
+      comment: 'Nice seller and service',
+      rating: 4.6,
     });
-    await buyerReview.save();
+    await sellerReview.save();
 
-    const pageHitInDb = await BuyerReview.findOne({
-      _id: buyerReview._id,
+    const pageHitInDb = await SellerReview.findOne({
+      _id: sellerReview._id,
     }).exec();
 
     expect(pageHitInDb?.request).toEqual(mockBuyerRequest._id);
     expect(pageHitInDb?.buyer).toEqual(mockBuyerUser._id);
     expect(pageHitInDb?.seller).toEqual(mockSellerUser._id);
     expect(pageHitInDb?.service).toEqual(mockSellerService._id);
-    expect(pageHitInDb?.comment).toEqual('Nice buyer');
-    expect(pageHitInDb?.rating).toEqual(4.2);
+    expect(pageHitInDb?.comment).toEqual('Nice seller and service');
+    expect(pageHitInDb?.rating).toEqual(4.6);
   });
 
   it('Should not accept invalid data', async () => {
-    const invalidBuyerReview = new BuyerReview({
+    const invalidSellerReview = new SellerReview({
       request: mockBuyerRequest._id,
       seller: mockSellerUser._id,
       buyer: mockBuyerUser._id,
-      comment: 'Nice buyer',
-      rating: 9,
+      rating: 10,
     });
 
-    invalidBuyerReview.validate((err) => {
+    invalidSellerReview.validate((err) => {
       expect(err).toBeDefined();
     });
   });

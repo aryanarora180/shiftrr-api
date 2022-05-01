@@ -2,6 +2,7 @@ import User from '../../src/models/user';
 import Service from '../../src/models/service';
 import Request from '../../src/models/request';
 import BuyerReview from '../../src/models/buyerReview';
+import sellerReview from '../../src/models/sellerReview';
 
 export const mockBuyerUser = new User({
   profilePicture:
@@ -70,4 +71,22 @@ export const mockBuyerReview2 = new BuyerReview({
   buyer: mockBuyerUser._id,
   comment: 'Second nice service',
   rating: 4.3,
+});
+
+export const mockSellerReview = new sellerReview({
+  request: mockBuyerRequest._id,
+  service: mockSellerService._id,
+  seller: mockSellerUser._id,
+  buyer: mockBuyerUser._id,
+  comment: 'First seller review',
+  rating: 2.5,
+});
+
+export const mockSellerReview2 = new sellerReview({
+  request: mockBuyerRequest._id,
+  service: mockSellerService._id,
+  seller: mockSellerUser._id,
+  buyer: mockBuyerUser._id,
+  comment: 'Second seller review',
+  rating: 4.8,
 });

@@ -10,7 +10,7 @@ import {
   mockBuyerRequest,
   mockBuyerReview,
   mockBuyerReview2,
-} from '../helpers/buyerReview';
+} from '../helpers/review';
 
 import {
   getAllBuyerReviews,
