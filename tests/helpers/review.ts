@@ -56,6 +56,14 @@ export const mockBuyerRequest = new Request({
   information: 'Please get this done fast',
 });
 
+export const mockBuyerRequest2 = new Request({
+  service: mockSellerService._id,
+  buyer: mockBuyerUser._id,
+  seller: mockSellerUser._id,
+  price: 95,
+  information: 'Second mock buyer request',
+});
+
 export const mockBuyerReview = new BuyerReview({
   request: mockBuyerRequest._id,
   service: mockSellerService._id,
