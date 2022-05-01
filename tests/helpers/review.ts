@@ -3,6 +3,7 @@ import Service from '../../src/models/service';
 import Request from '../../src/models/request';
 import BuyerReview from '../../src/models/buyerReview';
 import sellerReview from '../../src/models/sellerReview';
+import requestReview from '../../src/models/requestReview';
 
 export const mockBuyerUser = new User({
   profilePicture:
@@ -60,7 +61,7 @@ export const mockBuyerReview = new BuyerReview({
   service: mockSellerService._id,
   seller: mockSellerUser._id,
   buyer: mockBuyerUser._id,
-  comment: 'First nice service',
+  comment: 'First buyer review',
   rating: 3.2,
 });
 
@@ -69,7 +70,7 @@ export const mockBuyerReview2 = new BuyerReview({
   service: mockSellerService._id,
   seller: mockSellerUser._id,
   buyer: mockBuyerUser._id,
-  comment: 'Second nice service',
+  comment: 'Second buyer review',
   rating: 4.3,
 });
 
@@ -89,4 +90,22 @@ export const mockSellerReview2 = new sellerReview({
   buyer: mockBuyerUser._id,
   comment: 'Second seller review',
   rating: 4.8,
+});
+
+export const mockRequestReview = new requestReview({
+  request: mockBuyerRequest._id,
+  service: mockSellerService._id,
+  seller: mockSellerUser._id,
+  buyer: mockBuyerUser._id,
+  comment: 'First request review',
+  rating: 3.4,
+});
+
+export const mockRequestReview2 = new requestReview({
+  request: mockBuyerRequest._id,
+  service: mockSellerService._id,
+  seller: mockSellerUser._id,
+  buyer: mockBuyerUser._id,
+  comment: 'Second request review',
+  rating: 1.3,
 });
